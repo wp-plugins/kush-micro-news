@@ -122,11 +122,13 @@ function kush_mn_install () {
    $table_name = $wpdb->prefix . "kushmicronews"; 
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
+	$ver=get_option("kush_mn_db_version");
+	
 if($wpdb->get_var("SHOW TABLES LIKE '".$table_name."';")!=$table_name)   
 {	
 	$query = "CREATE TABLE $table_name (
 	  id mediumint(9) PRIMARY KEY AUTO_INCREMENT,
-	  time datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 	  name mediumtext NOT NULL,
 	  text text NOT NULL,
 	  url tinytext
