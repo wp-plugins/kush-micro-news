@@ -13,24 +13,61 @@ add_submenu_page('micro-news','Micro News Settings', 'Settings', 'administrator'
 }
 
 function micro_news_config_page(){
-	if(isset($_POST['numPost']))
+$what='';
+if(isset($_POST['valSub']))
+	{if(isset($_POST['numPost']))
 		{
 		if($_POST['numPost']!='')
 			{$num=sanitize($_POST['numPost']);
 			 update_option( "kush_mn_num_news",$num);
+			 
+			 $what='Changes Saved !';
 			}
 		else
-			echo _e('<h3>Input something first.</h3>');
-		
+			echo _e('<h3>No of post cannot left blank.</h3>');
+			
 		}
+	if(isset($_POST['chkBorder']))
+		{if($_POST['chkBorder']==true)
+			update_option( "kush_mn_show_lborder",'true');		
+			
+		$what='Changes Saved !';
+		}
+	else
+		update_option( "kush_mn_show_lborder",'false');
+		
+	if(isset($_POST['chkHover']))
+		{if($_POST['chkHover']==true)
+			update_option( "kush_mn_show_linkclean",'true');		
+		
+		$what='Changes Saved !';
+		}
+	else	
+	update_option('kush_mn_show_linkclean','false');
+}
 ?>
 <div class="wrap">
 	<div class="icon32" id="icon-options-general"> <br /> </div>
 	<h2>Micro News Settings</h2>
+	<?php echo ($what!='')?'<div class="updated"><p><strong>'.$what.'</strong></p></div>':''; ?>
 	<br/>
 	<form action="" method="post">
-		Number of news to display : <input type="text" name="numPost" value="<?php echo get_option( "kush_mn_num_news");?>"/><h6 style="display:inline-block;">(via kush_micro_news_output() function)</h6>
+		<h3>Functional Settings :</h3>
+		<div class="options">
+			<label for="numPost">Number of news to display :</label>
+			<input type="text" name="numPost" value="<?php echo get_option( "kush_mn_num_news");?>"/><h6 style="display:inline-block;">(via kush_micro_news_output() function)</h6>
+		</div>
+		<h3>Display Settings :</h3>
+		<div class="options">
+			<label for="chkBorder">Disable colorful borders:</label>
+			<input type="checkbox" name="chkBorder" value="true" <?php $sBor=get_option('kush_mn_show_lborder');if($sBor=='true'){echo 'checked';}?>/>
+		</div>
+		<div class="options">
+			<label for="chkHover">Disable link Hover effect:</label>
+			<input type="checkbox" name="chkHover" value="true" <?php $lHov=get_option('kush_mn_show_linkclean');if($lHov=='true'){echo 'checked';}?>/>
+		</div>
 		<br/><br/>
+		<input type="hidden" name="valSub" value="submitted"/>
 		<input type="submit" value="Save Changes" class="button-primary"/>
 	</form>	
 		

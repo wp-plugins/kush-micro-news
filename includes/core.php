@@ -8,6 +8,8 @@ $table_name = $wpdb->prefix . "kushmicronews";
 	 $color = array('#55A4F2','#8bbf36','#fff2a8','#33363B',' #F25555','#222','#999966','#FF66FF'); $i=0;
 	if($no_of_news==0)
 		{$no_of_news=get_option( "kush_mn_num_news");}
+	$showBorder=get_option('kush_mn_show_lborder');
+	$cleanHov=get_option('kush_mn_show_linkclean');
 	 ?>
 <?php $rows = $wpdb->get_results( "SELECT * FROM `$table_name` ORDER BY `time` DESC LIMIT 0,$no_of_news ;" );
 ?>
@@ -17,12 +19,12 @@ $table_name = $wpdb->prefix . "kushmicronews";
 foreach ( $rows as $row ) 
 {	
  ?>	
-	<div class="wrapNews <?php echo $row->id;?>" style="border-color:<?php echo $color[$i];?>">
+	<div class="wrapNews <?php echo $row->id;?>" style="border-color:<?php if($showBorder=='true'){echo $color[$i];}?>">
     	<h3 class="title"><?php echo $row->name;?></h3><span class="postedOn"> on <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
     	<div class="text"><?php echo $row->text;?></div>
         
         <?php if($row->url):?>
-		<span class="link"><a href="<?php echo $row->url;?>" title="<?php echo $row->name;?>" target="_blank">Read Full story &raquo;</a></span>
+		<span class="link <?php if($cleanHov!='true'){echo 'clean';}?>"><a href="<?php echo $row->url;?>" title="<?php echo $row->name;?>" target="_blank">Read Full story &raquo;</a></span>
 		<?php endif;?>
     </div> 
 	

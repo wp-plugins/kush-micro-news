@@ -11,7 +11,7 @@
 #micro-news .head{
 	width:100%;
 	overflow:hidden;
-	background:url(/assets/img/black-stripe.gif);
+	background:url(../img/black-stripe.gif);
 	opacity:0.7;
 	filter:alpha(opacity=70);
 	height:23px;
@@ -32,7 +32,7 @@
 #micro-news .wrapNews{
 	width:98%;
 	padding:2px;
-	border-left:4px solid #F2A355;
+	border-left:4px solid transparent;
 	min-height:70px;
 	position:relative;
 }
@@ -64,6 +64,10 @@
 
 .wrapNews .link:hover{
 	background-color:#8bbf36;
+}
+
+.wrapNews .clean:hover{
+	background-color:transparent;
 }
 
 .wrapNews .link a{
