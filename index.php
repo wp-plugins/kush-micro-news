@@ -2,7 +2,7 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.1
+Version: 1.2
 Author: Kush Sharma
 Author Email: kush.dev@live.com 
 Author URI: http://softnuke.com/
@@ -41,8 +41,9 @@ function kush_micronews_load_depen(){
 function kush_micronews_load(){
 	
     if(is_admin()) //load admin files only in admin
-        require_once(KUSH_MICRO_NEWS_DIR.'includes/admin.php');
-        
+        {require_once(KUSH_MICRO_NEWS_DIR.'includes/admin.php');
+		 require_once(KUSH_MICRO_NEWS_DIR.'includes/backup.php');
+        }
     require_once(KUSH_MICRO_NEWS_DIR.'includes/core.php');
 	
 }

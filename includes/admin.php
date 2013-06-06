@@ -43,7 +43,8 @@ if(isset($_POST['valSub']))
 		$what='Changes Saved !';
 		}
 	else	
-	update_option('kush_mn_show_linkclean','false');
+	update_option('kush_mn_show_linkclean','false');	
+	
 }
 ?>
 <div class="wrap">
@@ -59,16 +60,18 @@ if(isset($_POST['valSub']))
 		</div>
 		<h3>Display Settings :</h3>
 		<div class="options">
-			<label for="chkBorder">Disable colorful borders:</label>
+			<label for="chkBorder">Enable colorful borders:</label>
 			<input type="checkbox" name="chkBorder" value="true" <?php $sBor=get_option('kush_mn_show_lborder');if($sBor=='true'){echo 'checked';}?>/>
 		</div>
 		<div class="options">
-			<label for="chkHover">Disable link Hover effect:</label>
+			<label for="chkHover">Enable link Hover effect:</label>
 			<input type="checkbox" name="chkHover" value="true" <?php $lHov=get_option('kush_mn_show_linkclean');if($lHov=='true'){echo 'checked';}?>/>
 		</div>
 		<br/><br/>
 		<input type="hidden" name="valSub" value="submitted"/>
 		<input type="submit" value="Save Changes" class="button-primary"/>
+		<br><hr>
+		Download Backup of your Micro News data : <a href="?backup=true" target="_blank" class="button-primary">Download</a>
 	</form>	
 		
 </div>
