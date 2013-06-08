@@ -43,7 +43,16 @@ if(isset($_POST['valSub']))
 		$what='Changes Saved !';
 		}
 	else	
-	update_option('kush_mn_show_linkclean','false');	
+	update_option('kush_mn_show_linkclean','false');
+		
+	if(isset($_POST['chkHtmlParse']))
+		{if($_POST['chkHtmlParse']==true)
+			update_option( "kush_mn_parse_html",'true');		
+		
+		$what='Changes Saved !';
+		}
+	else	
+	update_option('kush_mn_parse_html','false');
 	
 }
 ?>
@@ -56,7 +65,8 @@ if(isset($_POST['valSub']))
 		<h3>Functional Settings :</h3>
 		<div class="options">
 			<label for="numPost">Number of news to display :</label>
-			<input type="text" name="numPost" value="<?php echo get_option( "kush_mn_num_news");?>"/><h6 style="display:inline-block;">(via kush_micro_news_output() function)</h6>
+			<input type="text" name="numPost" value="<?php echo get_option( "kush_mn_num_news");?>"/>
+			<h6 style="display:inline-block;margin:0;">(via kush_micro_news_output() function)</h6>
 		</div>
 		<h3>Display Settings :</h3>
 		<div class="options">
@@ -64,8 +74,14 @@ if(isset($_POST['valSub']))
 			<input type="checkbox" name="chkBorder" value="true" <?php $sBor=get_option('kush_mn_show_lborder');if($sBor=='true'){echo 'checked';}?>/>
 		</div>
 		<div class="options">
-			<label for="chkHover">Enable link Hover effect:</label>
+			<label for="chkHover">Enable link hover effect:</label>
 			<input type="checkbox" name="chkHover" value="true" <?php $lHov=get_option('kush_mn_show_linkclean');if($lHov=='true'){echo 'checked';}?>/>
+		</div>
+		<h3>Input Settings :</h3>
+		<div class="options">
+			<label for="chkHtmlParse">Allow HTML parsing while adding news:</label>
+			<input type="checkbox" name="chkHtmlParse" value="true" <?php $lHov=get_option('kush_mn_parse_html');if($lHov=='true'){echo 'checked';}?>/>
+			<h6 style="display:inline-block;margin:0;">(Try not to use improper markup if HTML parsing is enabled otherwise it could break up your whole site.)</h6>
 		</div>
 		<br/><br/>
 		<input type="hidden" name="valSub" value="submitted"/>
@@ -73,6 +89,8 @@ if(isset($_POST['valSub']))
 		<br><hr>
 		Download Backup of your Micro News data : <a href="?backup=true" target="_blank" class="button-primary">Download</a>
 	</form>	
+	
+	Note : Give readme.txt a try before experimenting stuff if you have no idea what you are doing.
 		
 </div>
 <?php
@@ -89,9 +107,18 @@ function micro_news_html_page_add_new(){
 $what='';	
 	if(isset($_POST['k_mn_hidden']) && $_POST['k_mn_hidden']=='Y')
 		{
-		$title=sanitize($_POST['k_mn_title']);
-		$content=sanitize($_POST['k_mn_content']);
-		$link=sanitize($_POST['k_mn_link']);
+		if(get_option('kush_mn_parse_html')=='false')
+		{
+			$title=sanitize($_POST['k_mn_title']);
+			$content=sanitize($_POST['k_mn_content']);
+			$link=sanitize($_POST['k_mn_link']);
+		}
+		else
+		{
+			$title=$_POST['k_mn_title'];
+			$content=$_POST['k_mn_content'];
+			$link=$_POST['k_mn_link'];
+		}
 		
 			
 		global $wpdb;			
@@ -102,7 +129,6 @@ $what='';
 			
 			$rows_affected = $wpdb->query("INSERT INTO `$table_name` (`time`,`name`,`text`,`url`)VALUES('".date('Y-m-d H:i:s')."','$title','$content','$link');");
 				
-			
 			if($rows_affected==true)
 				{?><div class="updated"><p><strong><?php _e('New Post Added.' ); ?></strong></p></div>'<?php }
 			}

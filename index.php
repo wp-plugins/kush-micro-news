@@ -2,7 +2,7 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.2.1
+Version: 1.2.2
 Author: Kush Sharma
 Author Email: kush.dev@live.com 
 Author URI: http://softnuke.com/
@@ -42,7 +42,7 @@ function kush_micronews_load(){
 	
     if(is_admin()) //load admin files only in admin
         {require_once(KUSH_MICRO_NEWS_DIR.'includes/admin.php');
-		 require_once(KUSH_MICRO_NEWS_DIR.'includes/backup.php');
+		 include_once(KUSH_MICRO_NEWS_DIR.'includes/backup.php');
         }
     require_once(KUSH_MICRO_NEWS_DIR.'includes/core.php');
 	
@@ -151,6 +151,7 @@ if($wpdb->get_var("SHOW TABLES LIKE '".$table_name."';")!=$table_name)
   add_option( "kush_mn_num_news","5"); 
   add_option( "kush_mn_show_lborder",'true');
   add_option('kush_mn_show_linkclean','true');
+  add_option('kush_mn_parse_html','true');
 }
 kush_mn_install ();	
 	
@@ -159,11 +160,6 @@ kush_mn_install ();
 function kush_micronews_deactivation() {    
 	// actions to perform once on plugin deactivation go here	
 		
-	delete_option('kush_mn_db_version');
-	delete_option('kush_mn_num_news');
-	delete_option('kush_mn_show_lborder');
-	delete_option('kush_mn_show_linkclean');
-	
 	unregister_widget('KushMNWidget');
 }
 

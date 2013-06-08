@@ -49,11 +49,20 @@ global $wpdb;
 	
 if(isset($_POST['nTitle']) & empty($_POST['nTitle'])===false)
 		{
-		$title=sanitize($_POST['nTitle']);
-		$id=sanitize($_POST['nId']);
-		$content=sanitize($_POST['nContent']);
-		$link=sanitize($_POST['nLink']);
-		
+		if(get_option('kush_mn_parse_html')=='false')
+		{
+			$title=sanitize($_POST['nTitle']);
+			$id=sanitize($_POST['nId']);
+			$content=sanitize($_POST['nContent']);
+			$link=sanitize($_POST['nLink']);
+		}
+		else
+		{
+			$title=$_POST['nTitle'];
+			$id=$_POST['nId'];
+			$content=$_POST['nContent'];
+			$link=$_POST['nLink'];
+		}
 		$query="UPDATE `$table_name` SET `name`='$title' ,`text`='$content' ,`url`='$link',`time`='".date('Y-m-d H:i:s')."' WHERE `id`='$id';";
 		
 			$chk=$wpdb->query($query);
@@ -105,12 +114,13 @@ if(is_admin())
 		 ?>	
 			<div class="wrapNews" data-id="<?php echo $row->id;?>">
 				<span class="number"><?php echo $i;$i++;?>) </span>
-				<h3 class="title <?php echo $row->id;?>" id="title-<?php echo $row->id;?>">
+				<div class="title" id="title-<?php echo $row->id;?>">
 					<?php echo $row->name;?>
-				</h3>
+				</div>
 				<span class="postedOn"> <strong>on</strong> <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
-				<div class="text <?php echo $row->id;?>" id="text-<?php echo $row->id;?>"><?php echo $row->text;?></div>
-				
+				<div class="text" id="text-<?php echo $row->id;?>">
+					<?php echo $row->text;?>
+				</div>				
 				<strong>Reference Link : </strong><span class="link" id="link-<?php echo $row->id;?>"><?php echo $row->url;?></a></span>
 				<input type="button" value="edit" class="button-primary editB"/>
 				<input type="button" value="Delete" class="button-primary delB"/>
