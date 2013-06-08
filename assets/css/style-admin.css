@@ -1,5 +1,20 @@
 /* Sidebar Micro News Starts */
 
+/* slightly enhanced, universal clearfix hack */
+.clearfix:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+     }
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+/* close commented backslash hack */
+
 #micro-news	{
 	width:90%;
 	height:auto;
@@ -77,6 +92,7 @@
 .wrapNews .link a:hover{
 	color:black; 
 }
+
 /*--------------------------------*/
 #micro-news-more-link{
 	padding:10px;
@@ -92,10 +108,32 @@ width:100px;
 padding:5px;
 position:absolute;
 top:0px;
-right:0px;
+right:15px;
 
 }
 
+#micro-news  .closeB{
+	margin-top:1px;
+	padding:4px 5px 4px 5px;
+	color: #fff;
+	background: #21759b;
+	cursor:pointer;
+	position:absolute;
+	top:0px;
+	right:0px;
+	width:5px;
+	
+	-webkit-border-radius: 11px;
+border-radius: 11px;
+-moz-box-sizing: content-box;
+-webkit-box-sizing: content-box;
+box-sizing: content-box;
+}
+
+#micro-news  .closeB:hover{
+	-webkit-border-radius: 1px;
+border-radius: 1px;
+}
 
 #update-micro-news {
 	border-top: 2px solid #565656;

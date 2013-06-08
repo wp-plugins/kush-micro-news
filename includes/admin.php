@@ -89,7 +89,7 @@ if(isset($_POST['valSub']))
 		<br><hr>
 		Download Backup of your Micro News data : <a href="?backup=true" target="_blank" class="button-primary">Download</a>
 	</form>	
-	
+	<br><br>
 	Note : Give readme.txt a try before experimenting stuff if you have no idea what you are doing.
 		
 </div>

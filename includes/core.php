@@ -114,16 +114,17 @@ if(is_admin())
 		 ?>	
 			<div class="wrapNews" data-id="<?php echo $row->id;?>">
 				<span class="number"><?php echo $i;$i++;?>) </span>
-				<div class="title" id="title-<?php echo $row->id;?>">
+				<div class="title" id="mn-title-<?php echo $row->id;?>">
 					<?php echo $row->name;?>
 				</div>
 				<span class="postedOn"> <strong>on</strong> <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
-				<div class="text" id="text-<?php echo $row->id;?>">
+				<div class="text" id="mn-text-<?php echo $row->id;?>">
 					<?php echo $row->text;?>
 				</div>				
-				<strong>Reference Link : </strong><span class="link" id="link-<?php echo $row->id;?>"><?php echo $row->url;?></a></span>
+				<strong>Reference Link : </strong><span class="link" id="mn-link-<?php echo $row->id;?>"><?php echo $row->url;?></a></span>
 				<input type="button" value="edit" class="button-primary editB"/>
 				<input type="button" value="Delete" class="button-primary delB"/>
+				<span class="closeB" id="mn-close-<?php echo $row->id;?>">x</span>
 			</div>  
 		<?php
 			}//for each loop
