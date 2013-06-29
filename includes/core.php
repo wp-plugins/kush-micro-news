@@ -122,9 +122,9 @@ if(is_admin())
 					<?php echo $row->text;?>
 				</div>				
 				<strong>Reference Link : </strong><span class="link" id="mn-link-<?php echo $row->id;?>"><?php echo $row->url;?></a></span>
-				<input type="button" value="edit" class="button-primary editB"/>
+				<input type="button" value="edit" class="button-primary editB" data-id="mn-edit-<?php echo $row->id;?>"/>
 				<input type="button" value="Delete" class="button-primary delB"/>
-				<span class="closeB" id="mn-close-<?php echo $row->id;?>">x</span>
+				<span class="closeB">x</span>
 			</div>  
 		<?php
 			}//for each loop

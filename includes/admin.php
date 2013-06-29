@@ -6,7 +6,7 @@ add_action('admin_menu', 'kush_micro_news_admin_menu');
 
 function kush_micro_news_admin_menu() {
 
-add_menu_page('Micro News Board', 'Micro News','administrator' , 'micro-news', 'micro_news_html_page','',6);
+add_menu_page('Micro News Board', 'Micro News','administrator' , 'micro-news', 'micro_news_html_page','','6.1995');
 
 add_submenu_page('micro-news','Micro News Add New', 'Add New', 'administrator','micro-news-new', 'micro_news_html_page_add_new');
 add_submenu_page('micro-news','Micro News Settings', 'Settings', 'administrator','micro-news-config', 'micro_news_config_page');
@@ -90,8 +90,8 @@ if(isset($_POST['valSub']))
 		Download Backup of your Micro News data : <a href="?backup=true" target="_blank" class="button-primary">Download</a>
 	</form>	
 	<br><br>
-	Note : Give readme.txt a try before experimenting stuff if you have no idea what you are doing.
-		
+	Note : Give <a href="http://plugins.svn.wordpress.org/kush-micro-news/trunk/readme.txt" target="_blank">readme.txt</a> a try before experimenting stuff if you have no idea what you are doing.
+	
 </div>
 <?php
 }
@@ -150,7 +150,7 @@ $what='';
 		</div>
 		<div class="row">
 			<label for="k_mn_content">Content:</label>
-			<textarea name="k_mn_content" id="content" >Excerpt</textarea>
+			<textarea name="k_mn_content" id="content" placeholder="Excerpt">.</textarea>
 		</div>
 		<div class="row">
 			<label for="k_mn_link">Link:</label>

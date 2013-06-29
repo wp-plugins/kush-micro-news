@@ -2,7 +2,7 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.3
+Version: 1.3.2.1
 Author: Kush Sharma
 Author Email: kush.dev@live.com 
 Author URI: http://softnuke.com/
@@ -152,6 +152,7 @@ if($wpdb->get_var("SHOW TABLES LIKE '".$table_name."';")!=$table_name)
   add_option( "kush_mn_show_lborder",'true');
   add_option('kush_mn_show_linkclean','true');
   add_option('kush_mn_parse_html','true');
+  
 }
 kush_mn_install ();	
 	
