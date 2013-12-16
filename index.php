@@ -2,9 +2,9 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.3.1
+Version: 1.3.2
 Author: Kush Sharma
-Author Email: kush.dev@live.com 
+Author Email: thekushsharma@gmail.com 
 Author URI: http://softnuke.com/
 Plugin URI: https://github.com/kushsharma/micro-news
 */
@@ -14,8 +14,7 @@ define('KUSH_MICRO_NEWS_URL', plugin_dir_url(__FILE__));
 	
 
 function kush_micronews_load_depen_reg(){
-	wp_register_style( 'kush_mn_style', KUSH_MICRO_NEWS_URL.'assets/css/style.css');
-	wp_register_style( 'kush_mn_style-admin', KUSH_MICRO_NEWS_URL.'assets/css/style-admin.css');
+	wp_register_style( 'kush_mn_style', KUSH_MICRO_NEWS_URL.'assets/css/style.css');	
 	wp_register_script( 'kush_mn_script', KUSH_MICRO_NEWS_URL.'assets/js/script.js',array('jquery'),'08052013');
 	//importing stylesheet and js.
 }
@@ -26,15 +25,15 @@ add_action('admin_enqueue_scripts','kush_micronews_load_depen');
 function kush_micronews_load_depen(){
 
 	if(is_admin())
-		{wp_enqueue_style('kush_mn_style-admin');
+		{//load admin files only in admin
 		wp_enqueue_script('kush_mn_script');
 		
 		$arr =array('url'=>KUSH_MICRO_NEWS_URL);
 		
 		wp_localize_script( 'kush_mn_script', 'object', $arr );
 		}
-	else
-		wp_enqueue_style('kush_mn_style');
+	
+	wp_enqueue_style('kush_mn_style');
 }
 
 

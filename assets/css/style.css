@@ -45,10 +45,10 @@
 }
 
 #micro-news .wrapNews{
-	width:98%;
-	padding:2px;
+	width:99%;
+	padding:2px 2px 20px 2px;	
 	border-left:4px solid transparent;
-	min-height:70px;
+	min-height:50px;
 	position:relative;
 }
 
@@ -56,18 +56,21 @@
 	color:#0066cc;
 	font-size:15px;
 	font-family:Myriad Pro, Trebuchet MS, Arial, Sans-Serif;
+	margin-top: 0px;
+	margin-bottom: 2px;
 }
 
 .wrapNews .text{
 	padding-bottom:20px;
+	position: relative;
 }
 
 .wrapNews .postedOn{
 	font-size:10px;
 	border-bottom:2px solid #CCC;
 	position:absolute;
-	left:5px;
-	bottom:5px;
+	left:0px;
+	bottom:0px;
 }
 
 .wrapNews .link{
@@ -104,6 +107,114 @@
 #micro-news-more-link:hover{
 	background-color:#8bbf36;
 }
+
+/* ------------------------------------------Admin starts ----*/
+
+
+#micro-news .editB{
+float:right;
+width:100px;
+position:absolute;
+top:0px;
+right:15px;
+
+}
+
+#micro-news  .closeB{
+	margin-top:1px;
+	padding:4px 5px 4px 5px;
+	color: #fff;
+	background: #21759b;
+	cursor:pointer;
+	position:absolute;
+	top:0px;
+	right:0px;
+	width:5px;
+	
+	-webkit-border-radius: 11px;
+border-radius: 11px;
+-moz-box-sizing: content-box;
+-webkit-box-sizing: content-box;
+box-sizing: content-box;
+}
+
+#micro-news  .closeB:hover{
+	-webkit-border-radius: 1px;
+border-radius: 1px;
+}
+
+#mirco-news .container-admin-meta-link{
+	position: relative;
+}
+
+#update-micro-news {
+	border-top: 2px solid #565656;
+}
+
+#update-micro-news .row{
+	width:100%;
+	padding:5px;
+	
+}
+
+#update-micro-news .row label{
+	display:block;
+}
+
+#update-micro-news input[type=text]{
+	width:400px;
+}
+
+#update-micro-news textarea{
+	width:400px;
+	height:80px;
+}
+
+#add-micro-news label{
+	display:block;
+}
+
+#add-micro-news input[type=text]{
+	width:400px;
+}
+
+#add-micro-news textarea{
+	width:400px;
+	height:80px;
+}
+
+#add-micro-news .row {
+	width:100%;
+	padding:15px;
+}
+
+#add-micro-news input[type=submit]{
+	width:100px;	
+}
+
+.micro-news-post-nav{
+	padding:2px;
+	margin:0;
+	font-size:15px;
+	line-height:20px;
+}
+
+.micro-news-post-nav li a{text-decoration:none;}
+
+.micro-news-post-nav li{
+	padding:2px 10px 2px 10px;
+	float:left;
+	border-bottom:2px solid #888888;
+	border-top:2px solid #888888;
+	border-left:2px solid transparent;
+	border-right:2px solid transparent;
+	margin-right:5px;
+}
+.micro-news-post-nav li:hover{
+	border:2px solid #888888;
+}
+
+/* ----Admin ends ----*/
 
 
 /* Sidebar Micro News Ends */

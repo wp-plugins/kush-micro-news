@@ -5,7 +5,7 @@ function kush_micro_news_output($no_of_news=0){
 global $wpdb;
 $table_name = $wpdb->prefix . "kushmicronews"; 
 
-	 $color = array('#55A4F2','#8bbf36','#fff2a8','#33363B',' #F25555','#222','#999966','#FF66FF'); $i=0;
+	$color = array('#55A4F2','#8bbf36','#fff2a8','#33363B',' #F25555','#222','#999966','#FF66FF'); $i=0;
 	if($no_of_news==0)
 		{$no_of_news=get_option( "kush_mn_num_news");}
 	$showBorder=get_option('kush_mn_show_lborder');
@@ -20,8 +20,10 @@ foreach ( $rows as $row )
 {	
  ?>	
 	<div class="wrapNews <?php echo $row->id;?>" style="border-color:<?php if($showBorder=='true'){echo $color[$i];}?>">
-    	<h3 class="title"><?php echo $row->name;?></h3><span class="postedOn"> on <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
-    	<div class="text"><?php echo $row->text;?></div>
+    	<h3 class="title"><?php echo $row->name;?></h3>    	
+    	<div class="text"><?php echo $row->text;?>
+    		<span class="postedOn"> on <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
+    	</div>
         
         <?php if($row->url):?>
 		<span class="link <?php if($cleanHov!='true'){echo 'clean';}?>"><a href="<?php echo $row->url;?>" title="<?php echo $row->name;?>" target="_blank">Read Full story &raquo;</a></span>
@@ -117,15 +119,20 @@ if(is_admin())
 				<div class="title" id="mn-title-<?php echo $row->id;?>">
 					<?php echo $row->name;?>
 				</div>
-				<span class="postedOn"> <strong>on</strong> <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
+				
 				<div class="text" id="mn-text-<?php echo $row->id;?>">
 					<?php echo $row->text;?>
-				</div>				
-				<strong>Reference Link : </strong><span class="link" id="mn-link-<?php echo $row->id;?>"><?php echo $row->url;?></a></span>
+				</div>
+				<div class="container-admin-meta-link">
+					<span> <strong>on</strong> <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
+					|				
+					<strong>Reference Link : </strong><span id="mn-link-<?php echo $row->id;?>"><?php echo $row->url;?></a></span>
+				</div>
 				<input type="button" value="edit" class="button-primary editB" data-id="mn-edit-<?php echo $row->id;?>"/>
 				<input type="button" value="Delete" class="button-primary delB"/>
 				<span class="closeB">x</span>
 			</div>  
+			<hr>
 		<?php
 			}//for each loop
 		?>

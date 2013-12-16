@@ -158,7 +158,9 @@ $what='';
 		</div>
 		<input type="hidden" name="k_mn_hidden" value="Y">
 		
-		<div><input type="submit" value="<?php _e('Add New');?>" class="button-primary"/></div>
+		<div class="row">
+			<input type="submit" value="<?php _e('Add New');?>" class="button-primary"/>
+		</div>
 	</div>
 	</form>
 	
