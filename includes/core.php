@@ -10,11 +10,12 @@ $table_name = $wpdb->prefix . "kushmicronews";
 		{$no_of_news=get_option( "kush_mn_num_news");}
 	$showBorder=get_option('kush_mn_show_lborder');
 	$cleanHov=get_option('kush_mn_show_linkclean');
+	$widgetName = get_option('kush_mn_widget_name');
 	 ?>
 <?php $rows = $wpdb->get_results( "SELECT * FROM `$table_name` ORDER BY `time` DESC LIMIT 0,$no_of_news ;" );
 ?>
 <div id="micro-news" class="clearfix">
-<h2 class="head"><strong>Micro News</strong></h2>
+<h2 class="head"><strong><?php echo $widgetName; ?></strong></h2>
 <?php
 foreach ( $rows as $row ) 
 {	
