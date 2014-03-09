@@ -15,7 +15,8 @@ add_submenu_page('micro-news','Micro News Settings', 'Settings', 'administrator'
 function micro_news_config_page(){
 $what='';
 if(isset($_POST['valSub']))
-	{if(isset($_POST['numPost']))
+	{
+	if(isset($_POST['numPost']))
 		{
 		if($_POST['numPost']!='')
 			{$num=sanitize($_POST['numPost']);
@@ -27,6 +28,19 @@ if(isset($_POST['valSub']))
 			echo _e('<h3>No of post cannot left blank.</h3>');
 			
 		}
+
+	if(isset($_POST['myRename']))
+	{
+	if($_POST['myRename']!='')
+		{$name=$_POST['myRename'];
+		 update_option("kush_mn_widget_name",$name);
+		 
+		 $what='Changes Saved !';
+		}
+	else
+		echo _e('<h3>Name cannot be left blank.</h3>');
+		
+	}
 	if(isset($_POST['chkBorder']))
 		{if($_POST['chkBorder']==true)
 			update_option( "kush_mn_show_lborder",'true');		
@@ -54,6 +68,9 @@ if(isset($_POST['valSub']))
 	else	
 	update_option('kush_mn_parse_html','false');
 	
+
+
+	
 }
 ?>
 <div class="wrap">
@@ -66,10 +83,14 @@ if(isset($_POST['valSub']))
 		<div class="options">
 			<label for="numPost">Number of news to display :</label>
 			<input type="text" name="numPost" value="<?php echo get_option( "kush_mn_num_news");?>"/>
-			<h6 style="display:inline-block;margin:0;">(via kush_micro_news_output() function)</h6>
+			<h5 style="display:inline-block;margin:0;">(via kush_micro_news_output() function)</h5>
 		</div>
 		<h3>Display Settings :</h3>
 		<div class="options">
+			<label for="myRename">Title over news:</label>
+			<input type="text" name="myRename" value="<?php echo get_option("kush_mn_widget_name");?>"/>
+			<h5 style="display:inline-block;margin:0;">(Try not to use any special character like inverted commas)</h5>
+			<br>
 			<label for="chkBorder">Enable colorful borders:</label>
 			<input type="checkbox" name="chkBorder" value="true" <?php $sBor=get_option('kush_mn_show_lborder');if($sBor=='true'){echo 'checked';}?>/>
 		</div>
@@ -81,7 +102,7 @@ if(isset($_POST['valSub']))
 		<div class="options">
 			<label for="chkHtmlParse">Allow HTML parsing while adding news:</label>
 			<input type="checkbox" name="chkHtmlParse" value="true" <?php $lHov=get_option('kush_mn_parse_html');if($lHov=='true'){echo 'checked';}?>/>
-			<h6 style="display:inline-block;margin:0;">(Try not to use improper markup if HTML parsing is enabled otherwise it could break up your whole site.)</h6>
+			<h5 style="display:inline-block;margin:0;">(Try not to use improper markup if HTML parsing is enabled otherwise it could break up your whole site.)</h5>
 		</div>
 		<br/><br/>
 		<input type="hidden" name="valSub" value="submitted"/>
