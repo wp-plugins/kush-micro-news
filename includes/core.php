@@ -138,7 +138,7 @@ if(is_admin())
 				</div>
 				<input type="button" value="Edit" class="button-primary editB" data-id="mn-edit-<?php echo $row->id;?>"/>
 				<input type="button" value="Delete" class="button-primary delB"/>
-				<span class="closeB">x</span>
+				<span class="button-primary closeB">x</span>
 			</div>  
 			<hr>
 		<?php
