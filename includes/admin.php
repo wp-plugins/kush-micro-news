@@ -15,7 +15,7 @@ add_submenu_page('micro-news','Micro News Settings', 'Settings', 'administrator'
 function micro_news_config_page(){
 $what='';
 if(isset($_POST['valSub']))
-	{
+{
 	if(isset($_POST['numPost']))
 		{
 		if($_POST['numPost']!='')
@@ -31,10 +31,8 @@ if(isset($_POST['valSub']))
 
 	if(isset($_POST['myRename']))
 	{
-	if($_POST['myRename']!='')
-		{$name=$_POST['myRename'];
-		 update_option("kush_mn_widget_name",$name);
-		 
+		if($_POST['myRename']!='')
+		{update_option("kush_mn_widget_name",$_POST['myRename']);		 
 		 $what='Changes Saved !';
 		}
 	else
@@ -57,7 +55,7 @@ if(isset($_POST['valSub']))
 		$what='Changes Saved !';
 		}
 	else	
-	update_option('kush_mn_show_linkclean','false');
+		update_option('kush_mn_show_linkclean','false');
 		
 	if(isset($_POST['chkHtmlParse']))
 		{if($_POST['chkHtmlParse']==true)
@@ -66,9 +64,21 @@ if(isset($_POST['valSub']))
 		$what='Changes Saved !';
 		}
 	else	
-	update_option('kush_mn_parse_html','false');
+		update_option('kush_mn_parse_html','false');
 	
-
+	
+	if(isset($_POST['textColor']) && $_POST['textColor']!="")
+	{
+		update_option( "kush_mn_color_text",$_POST['textColor']);
+		$what='Changes Saved !';
+	}
+	
+	if(isset($_POST['titleColor']) && $_POST['titleColor']!="")
+		{
+			update_option( "kush_mn_color_title",$_POST['titleColor']);
+			$what='Changes Saved !';
+		}			
+		
 
 	
 }
@@ -78,32 +88,67 @@ if(isset($_POST['valSub']))
 	<h2>Micro News Settings</h2>
 	<?php echo ($what!='')?'<div class="updated"><p><strong>'.$what.'</strong></p></div>':''; ?>
 	<br/>
-	<form action="" method="post">
+	<form action="" method="post" id="mirco-news-config">
 		<h3>Functional Settings :</h3>
 		<div class="options">
 			<label for="numPost">Number of news to display :</label>
 			<input type="text" name="numPost" value="<?php echo get_option( "kush_mn_num_news");?>"/>
 			<h5 style="display:inline-block;margin:0;">(via kush_micro_news_output() function)</h5>
 		</div>
+
 		<h3>Display Settings :</h3>
 		<div class="options">
 			<label for="myRename">Title over news:</label>
 			<input type="text" name="myRename" value="<?php echo get_option("kush_mn_widget_name");?>"/>
 			<h5 style="display:inline-block;margin:0;">(Try not to use any special character like inverted commas)</h5>
-			<br>
+		</div>
+		<div class="options">
 			<label for="chkBorder">Enable colorful borders:</label>
 			<input type="checkbox" name="chkBorder" value="true" <?php $sBor=get_option('kush_mn_show_lborder');if($sBor=='true'){echo 'checked';}?>/>
+		</div>
+		<div class="options">			
+			<label for="titleColor">Title Color:</label>
+			<select name="titleColorList" onclick="check_custom_color(this,'title')">
+				<option value="#0066CC">Light Blue [Default]</option>
+				<option value="#000000">Black</option>
+				<option value="#666666">Grey</option>
+				<option value="#8bbf36">Green</option>
+				<option value="#fff2a8">Golden</option>
+				<option value="#F25555">Red</option>
+				<option value="#FFD700">Yellow</option>
+				<option value="#FFB6C1">Pink</option>
+				<option value="#191970">Midnight Blue</option>				
+			</select>
+			<input type="text" name="titleColor" value="<?php echo get_option('kush_mn_color_title');?>" />
+			<h5 style="display:inline-block;margin:0;">(Hexadecimal color values, like: #0066CC)</h5>
+		</div>
+		<div class="options">
+			<label for="textColor">Text Color:</label>
+			<select name="textColorList" onclick="check_custom_color(this,'text')">
+				<option value="#666666">Grey [Default]</option>
+				<option value="#0066CC">Light Blue</option>
+				<option value="#000000">Black</option>
+				<option value="#8bbf36">Green</option>
+				<option value="#fff2a8">Golden</option>
+				<option value="#F25555">Red</option>
+				<option value="#FFD700">Yellow</option>
+				<option value="#FFB6C1">Pink</option>
+				<option value="#191970">Midnight Blue</option>				
+			</select>
+			<input type="text" name="textColor" value="<?php echo get_option('kush_mn_color_text');?>" />
 		</div>
 		<div class="options">
 			<label for="chkHover">Enable link hover effect:</label>
 			<input type="checkbox" name="chkHover" value="true" <?php $lHov=get_option('kush_mn_show_linkclean');if($lHov=='true'){echo 'checked';}?>/>
 		</div>
+
 		<h3>Input Settings :</h3>
 		<div class="options">
 			<label for="chkHtmlParse">Allow HTML parsing while adding news:</label>
 			<input type="checkbox" name="chkHtmlParse" value="true" <?php $lHov=get_option('kush_mn_parse_html');if($lHov=='true'){echo 'checked';}?>/>
 			<h5 style="display:inline-block;margin:0;">(Try not to use improper markup if HTML parsing is enabled otherwise it could break up your whole site.)</h5>
 		</div>
+		
 		<br/><br/>
 		<input type="hidden" name="valSub" value="submitted"/>
 		<input type="submit" value="Save Changes" class="button-primary"/>
@@ -114,6 +159,15 @@ if(isset($_POST['valSub']))
 	Note : Give <a href="http://plugins.svn.wordpress.org/kush-micro-news/trunk/readme.txt" target="_blank">readme.txt</a> a try before experimenting stuff if you have no idea what you are doing.
 	
 </div>
+<script type="text/javascript">
+	function check_custom_color(obj,elem){
+		var form = document.getElementById('mirco-news-config');	
+		if(elem == 'title')
+			form.titleColor.value = obj.value;
+		else
+			form.textColor.value = obj.value;
+	}	
+</script>
 <?php
 }
 

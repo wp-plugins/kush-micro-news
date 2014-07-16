@@ -1,49 +1,56 @@
 <?php
 
 function kush_micro_news_output($no_of_news=0){
+	//this is responsible for displaying the final output to user site in widgets or anywhere this function is called!
 
 global $wpdb;
 $table_name = $wpdb->prefix . "kushmicronews"; 
 
-	$color = array('#55A4F2','#8bbf36','#fff2a8','#33363B',' #F25555','#222','#999966','#FF66FF'); $i=0;
+	$color = array('#55A4F2','#8bbf36','#fff2a8','#33363B',' #F25555','#222','#999966','#FF66FF');
+	$i=0;//counter for multiple colors.
 	if($no_of_news==0)
 		{$no_of_news=get_option( "kush_mn_num_news");}
 	$showBorder=get_option('kush_mn_show_lborder');
 	$cleanHov=get_option('kush_mn_show_linkclean');
 	$widgetName = get_option('kush_mn_widget_name');
-	 ?>
-<?php $rows = $wpdb->get_results( "SELECT * FROM `$table_name` ORDER BY `time` DESC LIMIT 0,$no_of_news ;" );
-?>
-<div id="micro-news" class="clearfix">
-<h2 class="head"><strong><?php echo $widgetName; ?></strong></h2>
-<?php
-foreach ( $rows as $row ) 
-{	
- ?>	
-	<div class="wrapNews <?php echo $row->id;?>" style="border-color:<?php if($showBorder=='true'){echo $color[$i];}?>">
-    	<h3 class="title"><?php echo $row->name;?></h3>    	
-    	<div class="text"><?php echo $row->text;?>
-    		<span class="postedOn"> on <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
-    	</div>
-        
-        <?php if($row->url):?>
-		<span class="link <?php if($cleanHov!='true'){echo 'clean';}?>"><a href="<?php echo $row->url;?>" title="<?php echo $row->name;?>" target="_blank">Read Full story &raquo;</a></span>
-		<?php endif;?>
-    </div> 
+	$titleColor = get_option('kush_mn_color_title');
+	$textColor = get_option('kush_mn_color_text');
 	
-<?php
-	if($i>=7)
-		$i=0;
-	else
-		$i++;	
-		
-	}//foreach loop
+	$rows = $wpdb->get_results( "SELECT * FROM `$table_name` ORDER BY `time` DESC LIMIT 0, $no_of_news ");
 ?>
-</div><?php //micro news ends
 
-}
-/////////////////////////////////////////////////////////////////////////////////////
+<div id="micro-news" class="clearfix">
+	<h2 class="head"><strong><?php echo $widgetName; ?></strong></h2>
+	<?php
+	foreach ( $rows as $row ) 
+	{	
+	?>	
+		<div class="wrapNews <?php echo $row->id;?>" style="border-color:<?php if($showBorder=='true'){echo $color[$i];}?>">
+	    	<h3 class="title" style="color:<?php echo $titleColor?>"><?php echo $row->name;?></h3>    	
+	    	<div class="text" style="color:<?php echo $textColor?>"><?php echo $row->text;?>
+	    		<span class="postedOn"> on <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
+	    	</div>
+	        
+	        <?php if($row->url):?>
+			<span class="link <?php if($cleanHov!='true'){echo 'clean';}?>"><a href="<?php echo $row->url;?>" title="<?php echo $row->name;?>" target="_blank">Read Full story &raquo;</a></span>
+			<?php endif;?>
+	    </div> 
+	
+	<?php
+		if($i>=7)
+			$i=0;
+		else
+			$i++;	
+			
+	}//foreach loop
+	?>
+</div>
+<?php //micro news ends
+}//kush_micro_news_output function ends
 
+//////----------------------///////
+
+//this will handle the admin page of Micro news
 function kush_micro_news_output_admin(){
 
 global $wpdb;
@@ -129,7 +136,7 @@ if(is_admin())
 					|				
 					<strong>Reference Link : </strong><span id="mn-link-<?php echo $row->id;?>"><?php echo $row->url;?></a></span>
 				</div>
-				<input type="button" value="edit" class="button-primary editB" data-id="mn-edit-<?php echo $row->id;?>"/>
+				<input type="button" value="Edit" class="button-primary editB" data-id="mn-edit-<?php echo $row->id;?>"/>
 				<input type="button" value="Delete" class="button-primary delB"/>
 				<span class="closeB">x</span>
 			</div>  

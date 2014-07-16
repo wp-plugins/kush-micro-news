@@ -2,12 +2,12 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.3.3
+Version: 1.3.4
 Author: Kush Sharma
 Author Email: thekushsharma@gmail.com 
 Author URI: http://softnuke.com/
 Plugin URI: https://github.com/kushsharma/micro-news
-Last Officially Updated: 9 March 2014
+Last Officially Updated: 15 July 2014
 */
 
 define('KUSH_MICRO_NEWS_DIR', plugin_dir_path(__FILE__));
@@ -23,6 +23,8 @@ add_action('init','kush_micronews_load_depen_reg');
 
 add_action('wp_enqueue_scripts','kush_micronews_load_depen');
 add_action('admin_enqueue_scripts','kush_micronews_load_depen');
+
+//load dependent libraries
 function kush_micronews_load_depen(){
 
 	if(is_admin())
@@ -50,8 +52,7 @@ function kush_micronews_load(){
 kush_micronews_load();
 
 register_activation_hook(__FILE__, 'kush_micronews_activation');
-register_deactivation_hook(__FILE__, 'msp_micronews_deactivation');
-
+register_deactivation_hook(__FILE__, 'kush_micronews_deactivation');
 
 class KushMNWidget extends WP_Widget {
 
@@ -85,13 +86,9 @@ class KushMNWidget extends WP_Widget {
 			// Output admin widget options form
 			
 			
-		$instance = wp_parse_args(
-			(array)$instance,
-				array(
-					'no_news' => ''
-				)
-		);
-			$no_news = strip_tags(stripslashes($instance['no_news']));
+		$instance = wp_parse_args((array)$instance,	array('no_news' => ''));
+
+		$no_news = strip_tags(stripslashes($instance['no_news']));
 			
 ?>
 			
@@ -104,58 +101,60 @@ class KushMNWidget extends WP_Widget {
 				</div>
 			
 <?php
-		}
-		
-		
-	}
+		}//form ends		
+}//class ends
+
+//this will add micro news widget along with all wordpress widgets
 function kush_mn_reg_widg(){
 	register_widget( "KushMNWidget" );
 }
 add_action('widgets_init', 'kush_mn_reg_widg');	
 	
 
-function kush_micronews_activation() {
-    
+function kush_micronews_activation() {    
 	//actions to perform once on plugin activation go here  	
 	
-function kush_mn_install () {
-   global $wpdb;
-   $table_name = $wpdb->prefix . "kushmicronews"; 
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	function kush_mn_install(){
+		global $wpdb;
+		$table_name = $wpdb->prefix . "kushmicronews"; 
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-	$ver=get_option("kush_mn_db_version");
-	
-if($wpdb->get_var("SHOW TABLES LIKE '".$table_name."';")!=$table_name)   
-{	
-	$query = "CREATE TABLE $table_name (
-	  id mediumint(9) PRIMARY KEY AUTO_INCREMENT,
-	  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-	  name mediumtext NOT NULL,
-	  text text NOT NULL,
-	  url tinytext
-	);";
-	
-	dbDelta( $query );
+		$ver=get_option("kush_mn_db_version");
+		
+	if($wpdb->get_var("SHOW TABLES LIKE '".$table_name."';")!=$table_name)   
+	{	
+		$query = "CREATE TABLE $table_name (
+		  id mediumint(9) PRIMARY KEY AUTO_INCREMENT,
+		  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		  name mediumtext NOT NULL,
+		  text text NOT NULL,
+		  url tinytext
+		);";
+		
+		dbDelta( $query );
 
 
 
-  $welcome_name = "Ms. WordPress";
-  $welcome_text = "Congratulations, you just completed the installation! Delete or edit this news.";
-  $welcome_link = "http://www.softnuke.com";
+	  $welcome_name = "Ms. WordPress";
+	  $welcome_text = "Congratulations, you just completed the installation! Delete or edit this news.";
+	  $welcome_link = "http://www.softnuke.com";
+	  $rows_affected = $wpdb->insert( $table_name, array( 'time' => current_time('mysql'), 'name' => $welcome_name, 'text' =>$welcome_text, 'url' => $welcome_link ) );
+	}
+	  
+	  
 
-  $rows_affected = $wpdb->insert( $table_name, array( 'time' => current_time('mysql'), 'name' => $welcome_name, 'text' =>$welcome_text, 'url' => $welcome_link ) );
-}
-  
-  add_option( "kush_mn_db_version", "1.0" );
-  //setting default values
-  add_option( "kush_mn_num_news","5"); 
-  add_option( "kush_mn_show_lborder",'true');
-  add_option('kush_mn_show_linkclean','true');
-  add_option('kush_mn_parse_html','true');
-  add_option('kush_mn_widget_name','Micro News');
-  
-}
-kush_mn_install ();	
+		//setting default values
+		add_option( "kush_mn_db_version", "1.0" );
+		add_option( "kush_mn_num_news","5"); 
+		add_option( "kush_mn_show_lborder",'true');
+		add_option('kush_mn_show_linkclean','true');
+		add_option('kush_mn_parse_html','true');
+		add_option('kush_mn_widget_name','Micro News');
+		add_option('kush_mn_color_title','#0066cc');
+		add_option('kush_mn_color_text','#666666');
+	  
+	}
+	kush_mn_install();	
 	
 }
 
@@ -166,8 +165,7 @@ function kush_micronews_deactivation() {
 }
 
 
-
-
+// misc functions
 function sanitize($data){
 	return htmlentities($data);	
 }
