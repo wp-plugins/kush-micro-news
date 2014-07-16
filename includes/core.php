@@ -117,28 +117,28 @@ if(is_admin())
 	
 	<?php if($what!=''){echo '<h3>'.$what.'</h3>';}?>
 	
-		<div id="micro-news" class="clearfix widefat">	
+		<div id="micro-news-board" class="clearfix widefat">	
 		<?php $i=1;
 		foreach ( $rows as $row ) 
 		{	
 		 ?>	
 			<div class="wrapNews" data-id="<?php echo $row->id;?>">
 				<span class="number"><?php echo $i;$i++;?>) </span>
-				<div class="title" id="mn-title-<?php echo $row->id;?>">
+				<h2 class="title" id="mn-title-<?php echo $row->id;?>">
 					<?php echo $row->name;?>
-				</div>
+				</h2>
 				
 				<div class="text" id="mn-text-<?php echo $row->id;?>">
 					<?php echo $row->text;?>
 				</div>
 				<div class="container-admin-meta-link">
 					<span> <strong>on</strong> <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
-					|				
+					|
 					<strong>Reference Link : </strong><span id="mn-link-<?php echo $row->id;?>"><?php echo $row->url;?></a></span>
 				</div>
 				<input type="button" value="Edit" class="button-primary editB" data-id="mn-edit-<?php echo $row->id;?>"/>
+				<input type="button" value="X" class="button-primary closeB" />
 				<input type="button" value="Delete" class="button-primary delB"/>
-				<span class="button-primary closeB">x</span>
 			</div>  
 			<hr>
 		<?php

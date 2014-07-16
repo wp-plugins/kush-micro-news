@@ -108,6 +108,7 @@ if(isset($_POST['valSub']))
 		</div>
 		<div class="options">			
 			<label for="titleColor">Title Color:</label>
+			<input type="text" name="titleColor" value="<?php echo get_option('kush_mn_color_title');?>" />
 			<select name="titleColorList" onclick="check_custom_color(this,'title')">
 				<option value="#0066CC">Light Blue [Default]</option>
 				<option value="#000000">Black</option>
@@ -119,11 +120,11 @@ if(isset($_POST['valSub']))
 				<option value="#FFB6C1">Pink</option>
 				<option value="#191970">Midnight Blue</option>				
 			</select>
-			<input type="text" name="titleColor" value="<?php echo get_option('kush_mn_color_title');?>" />
 			<h5 style="display:inline-block;margin:0;">(Hexadecimal color values, like: #0066CC)</h5>
 		</div>
 		<div class="options">
 			<label for="textColor">Text Color:</label>
+			<input type="text" name="textColor" value="<?php echo get_option('kush_mn_color_text');?>" />
 			<select name="textColorList" onclick="check_custom_color(this,'text')">
 				<option value="#666666">Grey [Default]</option>
 				<option value="#0066CC">Light Blue</option>
@@ -135,7 +136,6 @@ if(isset($_POST['valSub']))
 				<option value="#FFB6C1">Pink</option>
 				<option value="#191970">Midnight Blue</option>				
 			</select>
-			<input type="text" name="textColor" value="<?php echo get_option('kush_mn_color_text');?>" />
 		</div>
 		<div class="options">
 			<label for="chkHover">Enable link hover effect:</label>
