@@ -74,12 +74,16 @@ if(isset($_POST['valSub']))
 	}
 	
 	if(isset($_POST['titleColor']) && $_POST['titleColor']!="")
-		{
-			update_option( "kush_mn_color_title",$_POST['titleColor']);
-			$what='Changes Saved !';
-		}			
-		
-
+	{
+		update_option( "kush_mn_color_title",$_POST['titleColor']);
+		$what='Changes Saved !';
+	}
+	
+	if(isset($_POST['linkColorField']) && $_POST['linkColorField']!="")
+	{
+		update_option( "kush_mn_color_link",$_POST['linkColorField']);
+		$what='Changes Saved !';
+	}
 	
 }
 ?>
@@ -101,11 +105,7 @@ if(isset($_POST['valSub']))
 			<label for="myRename">Title over news:</label>
 			<input type="text" name="myRename" value="<?php echo get_option("kush_mn_widget_name");?>"/>
 			<h5 style="display:inline-block;margin:0;">(Try not to use any special character like inverted commas)</h5>
-		</div>
-		<div class="options">
-			<label for="chkBorder">Enable colorful borders:</label>
-			<input type="checkbox" name="chkBorder" value="true" <?php $sBor=get_option('kush_mn_show_lborder');if($sBor=='true'){echo 'checked';}?>/>
-		</div>
+		</div>		
 		<div class="options">			
 			<label for="titleColor">Title Color:</label>
 			<input type="text" name="titleColor" value="<?php echo get_option('kush_mn_color_title');?>" />
@@ -138,6 +138,25 @@ if(isset($_POST['valSub']))
 			</select>
 		</div>
 		<div class="options">
+			<label for="linkColorField">Link Color:</label>
+			<input type="text" name="linkColorField" value="<?php echo get_option('kush_mn_color_link');?>" />
+			<select name="linkColorList" onclick="check_custom_color(this,'link')">
+				<option value="#8bbf36">Green [Default]</option>
+				<option value="#666666">Grey</option>
+				<option value="#0066CC">Light Blue</option>
+				<option value="#000000">Black</option>
+				<option value="#fff2a8">Golden</option>
+				<option value="#F25555">Red</option>
+				<option value="#FFD700">Yellow</option>
+				<option value="#FFB6C1">Pink</option>
+				<option value="#191970">Midnight Blue</option>				
+			</select>
+		</div>
+		<div class="options">
+			<label for="chkBorder">Enable colorful borders:</label>
+			<input type="checkbox" name="chkBorder" value="true" <?php $sBor=get_option('kush_mn_show_lborder');if($sBor=='true'){echo 'checked';}?>/>
+		</div>
+		<div class="options">
 			<label for="chkHover">Enable link hover effect:</label>
 			<input type="checkbox" name="chkHover" value="true" <?php $lHov=get_option('kush_mn_show_linkclean');if($lHov=='true'){echo 'checked';}?>/>
 		</div>
@@ -164,8 +183,10 @@ if(isset($_POST['valSub']))
 		var form = document.getElementById('mirco-news-config');	
 		if(elem == 'title')
 			form.titleColor.value = obj.value;
-		else
+		else if(elem == 'text')
 			form.textColor.value = obj.value;
+		else
+			form.linkColorField.value = obj.value;
 	}	
 </script>
 <?php

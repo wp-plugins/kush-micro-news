@@ -133,10 +133,10 @@
 
 #micro-news-board .editB{
 	float:right;
-	width:50px;
+	width:70px;
 	position:absolute;
 	top:0px;
-	right:25px;
+	right:45px;
 }
 
 #micro-news-board .closeB{	
@@ -241,8 +241,7 @@
 }
 
 #add-micro-news input[type=submit]{
-	width:100px;	
-	padding: 5px;
+	width:100px;		
 }
 
 /* - config - */

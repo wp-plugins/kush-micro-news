@@ -1,12 +1,12 @@
 <?php
 
-function kush_micro_news_output($no_of_news=0){
+function kush_micro_news_output($no_of_news=0,$header="true"){
 	//this is responsible for displaying the final output to user site in widgets or anywhere this function is called!
-
+	//$header attribute will decide whether to show Micro News Header or not
 global $wpdb;
 $table_name = $wpdb->prefix . "kushmicronews"; 
 
-	$color = array('#55A4F2','#8bbf36','#fff2a8','#33363B',' #F25555','#222','#999966','#FF66FF');
+	$color = array('#55A4F2','#8bbf36','#fff2a8','#33363B','#F25555','#666666','#999966','#FF66FF');
 	$i=0;//counter for multiple colors.
 	if($no_of_news==0)
 		{$no_of_news=get_option( "kush_mn_num_news");}
@@ -15,37 +15,59 @@ $table_name = $wpdb->prefix . "kushmicronews";
 	$widgetName = get_option('kush_mn_widget_name');
 	$titleColor = get_option('kush_mn_color_title');
 	$textColor = get_option('kush_mn_color_text');
+	$linkColor = get_option('kush_mn_color_link');
 	
 	$rows = $wpdb->get_results( "SELECT * FROM `$table_name` ORDER BY `time` DESC LIMIT 0, $no_of_news ");
-?>
 
-<div id="micro-news" class="clearfix">
-	<h2 class="head"><strong><?php echo $widgetName; ?></strong></h2>
-	<?php
-	foreach ( $rows as $row ) 
-	{	
-	?>	
-		<div class="wrapNews <?php echo $row->id;?>" style="border-color:<?php if($showBorder=='true'){echo $color[$i];}?>">
-	    	<h3 class="title" style="color:<?php echo $titleColor?>"><?php echo $row->name;?></h3>    	
-	    	<div class="text" style="color:<?php echo $textColor?>"><?php echo $row->text;?>
-	    		<span class="postedOn"> on <?php $date=strtotime($row->time); echo date('d M Y',$date);?></span>
-	    	</div>
-	        
-	        <?php if($row->url):?>
-			<span class="link <?php if($cleanHov!='true'){echo 'clean';}?>"><a href="<?php echo $row->url;?>" title="<?php echo $row->name;?>" target="_blank">Read Full story &raquo;</a></span>
-			<?php endif;?>
-	    </div> 
+	$output_html = "";//this will contain final output
+
+
+	$output_html .= '<div id="micro-news" class="clearfix">';
+
+	if($header=="true"){
+		$output_html .= '<h2 class="head"><strong>'.$widgetName.'</strong></h2>';
+	}//header if closed 
+
 	
-	<?php
+	foreach ( $rows as $row ) 		
+	{	
+		$date=strtotime($row->time);
+		$formateddate = date('d M Y',$date);
+	
+		$output_html .='<div class="wrapNews '.$row->id.'" style="border-color:';
+		if($showBorder=='true')//check border color
+			{$output_html .=$color[$i];}
+		$output_html .='">';
+
+			//show title
+	    	$output_html .='<h3 class="title" style="color:'.$titleColor.'">'.$row->name.'</h3>';  	
+	    	
+	    	//show text
+	    	$output_html .='<div class="text" style="color:'.$textColor.'">'.$row->text.' ';
+	    		$output_html .='<span class="postedOn"> on '.$formateddate.'</span>';
+	    	$output_html .='</div>';
+	        
+	        //show url if present
+	        if($row->url):
+				$output_html .='<span class="link ';
+				if($cleanHov!='true')//check if show link color inverted
+					$output_html .='clean';
+				$output_html .='"><a href="'.$row->url.'" title="'.$row->name.'" target="_blank" style="color:'.$linkColor.'">Read Full story &raquo;</a></span>';
+			endif;
+
+	    $output_html .='</div>';//wrapNews ends
+	
+		//this will reloop border color
 		if($i>=7)
 			$i=0;
 		else
 			$i++;	
 			
 	}//foreach loop
-	?>
-</div>
-<?php //micro news ends
+	
+$output_html .='</div>';//micro news ends
+
+return $output_html;
 }//kush_micro_news_output function ends
 
 //////----------------------///////
@@ -163,7 +185,5 @@ if(is_admin())
 	</ul>
 	<?php
 }
-
-
 
 ?>

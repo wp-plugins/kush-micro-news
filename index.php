@@ -2,7 +2,7 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.4.0
+Version: 1.4.1
 Author: Kush Sharma
 Author Email: thekushsharma@gmail.com 
 Author URI: http://softnuke.com/
@@ -20,13 +20,14 @@ function kush_micronews_load_depen_reg(){
 	//importing stylesheet and js.
 }
 add_action('init','kush_micronews_load_depen_reg');
+add_action('init','kush_micronews_create_shortcode');
 
 add_action('wp_enqueue_scripts','kush_micronews_load_depen');
 add_action('admin_enqueue_scripts','kush_micronews_load_depen');
 
-//load dependent libraries
-function kush_micronews_load_depen(){
 
+function kush_micronews_load_depen(){
+//load dependent libraries
 	if(is_admin())
 		{//load admin files only in admin
 		wp_enqueue_script('kush_mn_script');
@@ -51,6 +52,18 @@ function kush_micronews_load(){
 }
 kush_micronews_load();
 
+function kush_micronews_create_shortcode(){
+	// this will create shortcode [kushmicronews news="5" header="true"]
+	
+	function micronews_shortcode( $atts ) {
+	    $a = shortcode_atts( array( 'news' => '5', 'header' => 'true' ), $atts );
+
+	    return kush_micro_news_output($a['news'],$a['header']);
+	}
+	add_shortcode( 'kushmicronews', 'micronews_shortcode' );
+}
+	
+
 register_activation_hook(__FILE__, 'kush_micronews_activation');
 register_deactivation_hook(__FILE__, 'kush_micronews_deactivation');
 
@@ -69,7 +82,7 @@ class KushMNWidget extends WP_Widget {
 			$no_news = empty($instance['no_news']) ? '' : apply_filters('no_news', $instance['no_news']);
 			
 			echo $before_widget;			
-			kush_micro_news_output($no_news);			
+			echo kush_micro_news_output($no_news);			
 			echo $after_widget;
 		}
 
@@ -152,10 +165,11 @@ function kush_micronews_activation() {
 		add_option('kush_mn_widget_name','Micro News');
 		add_option('kush_mn_color_title','#0066cc');
 		add_option('kush_mn_color_text','#666666');
+		add_option('kush_mn_color_link','#8bbf36;');
 	  
 	}
-	kush_mn_install();	
-	
+	kush_mn_install();
+
 }
 
 function kush_micronews_deactivation() {    
