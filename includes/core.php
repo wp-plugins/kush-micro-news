@@ -1,8 +1,41 @@
 <?php
 
-function kush_micro_news_output($no_of_news=0,$header="true"){
+//handle ajax request
+if ( is_admin() ) {
+add_action("wp_ajax_kush_micronews_ajaxcallback", "kush_micronews_ajaxcallback");
+add_action("wp_ajax_nopriv_kush_micronews_ajaxcallback", "kush_micronews_ajaxcallback");
+}
+function kush_micronews_ajaxcallback()
+{
+	if(isset($_POST['what']) && $_POST['what']!=""){
+		if ($_POST['what'] == "loadmore" || $_POST['what'] == "loadhome") {
+			$what = $_POST['what'];
+			$number = $_POST['numnews'];
+			
+			$loops="0";
+			if(isset($_POST['loop']))
+				$loops = $_POST['loop'];
+			
+			$limit = $number * $loops; //from where to start
+
+			$newsdata = kush_micro_news_output($number,"false",$limit,"true");
+
+			if($newsdata != '<div class="data-holder"></div>')
+				echo $newsdata;
+			else
+				echo '0';
+
+			die();
+		}
+	}	
+}
+
+
+function kush_micro_news_output($no_of_news=0,$header="true",$limit=0,$onlyNews="false"){
 	//this is responsible for displaying the final output to user site in widgets or anywhere this function is called!
 	//$header attribute will decide whether to show Micro News Header or not
+	//$limit variable will decide where to start news from
+	//$onlyNews variable will output only wrapNews rows.
 global $wpdb;
 $table_name = $wpdb->prefix . "kushmicronews"; 
 
@@ -16,18 +49,23 @@ $table_name = $wpdb->prefix . "kushmicronews";
 	$titleColor = get_option('kush_mn_color_title');
 	$textColor = get_option('kush_mn_color_text');
 	$linkColor = get_option('kush_mn_color_link');
+	$loadNav = get_option('kush_mn_load_nav');
 	
-	$rows = $wpdb->get_results( "SELECT * FROM `$table_name` ORDER BY `time` DESC LIMIT 0, $no_of_news ");
+	$count_no_news = $wpdb->get_var("SELECT COUNT(`id`) FROM `$table_name`");
+
+	$rows = $wpdb->get_results( "SELECT * FROM `$table_name` ORDER BY `time` DESC LIMIT $limit, $no_of_news ");
 
 	$output_html = "";//this will contain final output
+	$last_news_id = "";//this will hold last news id
 
-
-	$output_html .= '<div id="micro-news" class="clearfix">';
+	if($onlyNews == "false")
+		$output_html .= '<div id="micro-news" class="clearfix">';
 
 	if($header=="true"){
 		$output_html .= '<h2 class="head"><strong>'.$widgetName.'</strong></h2>';
 	}//header if closed 
 
+	$output_html .='<div class="data-holder">';//container for rows
 	
 	foreach ( $rows as $row ) 		
 	{	
@@ -56,16 +94,33 @@ $table_name = $wpdb->prefix . "kushmicronews";
 			endif;
 
 	    $output_html .='</div>';//wrapNews ends
-	
+
 		//this will reloop border color
 		if($i>=7)
 			$i=0;
 		else
-			$i++;	
-			
+			$i++;
+
+		//store last news id
+		$last_news_id = $row->id;				
 	}//foreach loop
-	
-$output_html .='</div>';//micro news ends
+
+	$output_html .= '</div>';//data-holder ends
+
+	if($onlyNews == "false" && $count_no_news > $no_of_news && $loadNav == "true") //whether to display nav
+	{
+	$output_html .='<div class="load-nav clearfix" data-total="'.$count_no_news.'">';
+		$output_html .='<div class="loadMore" data-num="'.$no_of_news.'" data-lastnews="'.$last_news_id.'" data-loops="1">Load More &raquo;</div>';//load more news
+		$output_html .='<div class="loadHome" data-num="'.$no_of_news.'">Home</div>';//load more news
+	$output_html .='</div>';
+	}
+
+if($onlyNews == "false")
+	$output_html .='</div>';//micro news ends
+
+/*
+$url = plugin_dir_url( __FILE__ );
+*/
 
 return $output_html;
 }//kush_micro_news_output function ends

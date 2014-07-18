@@ -40,6 +40,10 @@
 	font-size:13px;
 }
 
+#micro-news .data-holder{
+	opacity: 1;
+}
+
 #micro-news .wrapNews{
 	width:99%;
 	padding:2px 2px 20px 2px;	
@@ -96,12 +100,48 @@
 	color:black; 
 }
 
-#micro-news-more-link{
+/*#micro-news-more-link{
 	padding:10px;
 	border:1px solid #CCC;
 }
 #micro-news-more-link:hover{
 	background-color:#8bbf36;
+}*/
+
+#micro-news .load-nav{
+	width: 100%;
+
+	font-family: 'sans-serif', Arial;
+	font-variant: small-caps;
+	
+}
+
+#micro-news .load-nav .loadMore, #micro-news .load-nav .loadHome{
+	width: 40%;
+	padding: 2px;
+	cursor: pointer;	
+	border-bottom: 1px solid #552369;	
+
+	-webkit-transition: border-color 200ms ease; 
+	-moz-transition: border-color 200ms ease;
+    -o-transition: border-color 200ms ease;
+    transition: border-color 200ms ease;
+}
+
+#micro-news .load-nav .loadMore{	
+	float: right;
+	text-align: right;
+	visibility: visible;
+}
+
+#micro-news .load-nav .loadHome{	
+	float: left;
+	text-align: left;	
+	visibility: hidden;
+}
+
+#micro-news .load-nav .loadMore:hover, #micro-news .load-nav .loadHome:hover{
+	border-color: #CCC;
 }
 
 /* ------------------------------------------Admin starts ----*/
@@ -110,6 +150,11 @@
 	padding:2px 2px 10px 2px;		
 	min-height:50px;
 	position:relative;
+	border-left:2px solid #F2EE45;
+}
+
+#micro-news-board .wrapNews:hover{
+	border-left:2px solid #9e3735;
 }
 
 #micro-news-board .wrapNews .title{
@@ -242,6 +287,14 @@
 
 #add-micro-news input[type=submit]{
 	width:100px;		
+}
+
+#kush-micro-news-buyaredbull {
+	margin-top: 100px;
+	padding: 2px;
+	width: 200px;
+	font-size: 10px;
+	border-left: 3px solid #8bbf36;
 }
 
 /* - config - */

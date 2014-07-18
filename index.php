@@ -2,12 +2,12 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.4.1
+Version: 1.4.2
 Author: Kush Sharma
 Author Email: thekushsharma@gmail.com 
 Author URI: http://softnuke.com/
 Plugin URI: https://github.com/kushsharma/micro-news
-Last Officially Updated: 16 July 2014
+Last Officially Updated: 18 July 2014
 */
 
 define('KUSH_MICRO_NEWS_DIR', plugin_dir_path(__FILE__));
@@ -16,7 +16,7 @@ define('KUSH_MICRO_NEWS_URL', plugin_dir_url(__FILE__));
 
 function kush_micronews_load_depen_reg(){
 	wp_register_style( 'kush_mn_style', KUSH_MICRO_NEWS_URL.'assets/css/style.css');	
-	wp_register_script( 'kush_mn_script', KUSH_MICRO_NEWS_URL.'assets/js/script.js',array('jquery'),'08052013');
+	wp_register_script( 'kush_mn_script', KUSH_MICRO_NEWS_URL.'assets/js/script.js', array('jquery'), '08052013');
 	//importing stylesheet and js.
 }
 add_action('init','kush_micronews_load_depen_reg');
@@ -29,13 +29,20 @@ add_action('admin_enqueue_scripts','kush_micronews_load_depen');
 function kush_micronews_load_depen(){
 //load dependent libraries
 	if(is_admin())
-		{//load admin files only in admin
+	{//load admin files only in admin
+		wp_enqueue_script('kush_mn_script');
+	}
+	else if(get_option('kush_mn_load_nav') != "false")
+	{//load only if user wants load more navigation
+
 		wp_enqueue_script('kush_mn_script');
 		
-		$arr =array('url'=>KUSH_MICRO_NEWS_URL);
-		
-		wp_localize_script( 'kush_mn_script', 'object', $arr );
-		}
+		//$arr =array('url'=>KUSH_MICRO_NEWS_URL);		
+		//can let me access js var from php
+		//wp_localize_script( 'kush_mn_script', 'kush_mn_script_object', $arr );
+
+		wp_localize_script( 'kush_mn_script', 'kush_mn_ajax_object', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));  
+	}
 	
 	wp_enqueue_style('kush_mn_style');
 }
@@ -153,9 +160,7 @@ function kush_micronews_activation() {
 	  $welcome_link = "http://www.softnuke.com";
 	  $rows_affected = $wpdb->insert( $table_name, array( 'time' => current_time('mysql'), 'name' => $welcome_name, 'text' =>$welcome_text, 'url' => $welcome_link ) );
 	}
-	  
-	  
-
+	
 		//setting default values
 		add_option( "kush_mn_db_version", "1.0" );
 		add_option( "kush_mn_num_news","5"); 
@@ -166,7 +171,8 @@ function kush_micronews_activation() {
 		add_option('kush_mn_color_title','#0066cc');
 		add_option('kush_mn_color_text','#666666');
 		add_option('kush_mn_color_link','#8bbf36;');
-	  
+	  	add_option('kush_mn_load_nav','false');
+
 	}
 	kush_mn_install();
 

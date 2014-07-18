@@ -17,7 +17,7 @@ $what='';
 if(isset($_POST['valSub']))
 {
 	if(isset($_POST['numPost']))
-		{
+	{
 		if($_POST['numPost']!='')
 			{$num=sanitize($_POST['numPost']);
 			 update_option( "kush_mn_num_news",$num);
@@ -25,9 +25,17 @@ if(isset($_POST['valSub']))
 			 $what='Changes Saved !';
 			}
 		else
-			echo _e('<h3>No of post cannot left blank.</h3>');
+			echo _e('<h3>No of post cannot left blank.</h3>');		
+	}
+
+	if(isset($_POST['chkLoadNav']))
+		{if($_POST['chkLoadNav']==true)
+			update_option( "kush_mn_load_nav",'true');		
 			
+		$what='Changes Saved !';
 		}
+	else
+		update_option( "kush_mn_load_nav",'false');
 
 	if(isset($_POST['myRename']))
 	{
@@ -95,9 +103,13 @@ if(isset($_POST['valSub']))
 	<form action="" method="post" id="mirco-news-config">
 		<h3>Functional Settings :</h3>
 		<div class="options">
-			<label for="numPost">Number of news to display :</label>
+			<label for="numPost">Number of news to display:</label>
 			<input type="text" name="numPost" value="<?php echo get_option( "kush_mn_num_news");?>"/>
 			<h5 style="display:inline-block;margin:0;">(via kush_micro_news_output() function)</h5>
+		</div>
+		<div class="options">
+			<label for="chkLoadNav">Enable load more post navigation:</label>
+			<input type="checkbox" name="chkLoadNav" value="true" <?php $lnav=get_option('kush_mn_load_nav');if($lnav=='true'){echo 'checked';}?>/>
 		</div>
 
 		<h3>Display Settings :</h3>
@@ -159,7 +171,7 @@ if(isset($_POST['valSub']))
 		<div class="options">
 			<label for="chkHover">Enable link hover effect:</label>
 			<input type="checkbox" name="chkHover" value="true" <?php $lHov=get_option('kush_mn_show_linkclean');if($lHov=='true'){echo 'checked';}?>/>
-		</div>
+		</div>	
 
 		<h3>Input Settings :</h3>
 		<div class="options">
@@ -239,28 +251,35 @@ $what='';
 <?php if($what!=''){echo '<h3>'.$what.'</h3>';}?>
 
 	<form method="post" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>" id="add-micro-news">
-	<div>
-		<div class="row">
-			<label for="k_mn_title">Title:</label>
-			<input type="text" name="k_mn_title" id="title" placeholder="Title of News"/>
+		<div>
+			<div class="row">
+				<label for="k_mn_title">Title:</label>
+				<input type="text" name="k_mn_title" id="title" placeholder="Title of News"/>
+			</div>
+			<div class="row">
+				<label for="k_mn_content">Content:</label>
+				<textarea name="k_mn_content" id="content" placeholder="Excerpt">.</textarea>
+			</div>
+			<div class="row">
+				<label for="k_mn_link">Link:</label>
+				<input type="text" name="k_mn_link" id="link" placeholder="Link Reference"/>
+			</div>
+			<input type="hidden" name="k_mn_hidden" value="Y">
+			
+			<div class="row">
+				<input type="submit" value="<?php _e('Add New');?>" class="button-primary"/>
+			</div>
 		</div>
-		<div class="row">
-			<label for="k_mn_content">Content:</label>
-			<textarea name="k_mn_content" id="content" placeholder="Excerpt">.</textarea>
-		</div>
-		<div class="row">
-			<label for="k_mn_link">Link:</label>
-			<input type="text" name="k_mn_link" id="link" placeholder="Link Reference"/>
-		</div>
-		<input type="hidden" name="k_mn_hidden" value="Y">
-		
-		<div class="row">
-			<input type="submit" value="<?php _e('Add New');?>" class="button-primary"/>
-		</div>
-	</div>
 	</form>
+
+	<div id="kush-micro-news-buyaredbull">
+			If you found this plugin useful and want to support its development then please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4BFA297YJX5QN" target="_blank">buying</a> it or you can make my <a href="http://www.amazon.in/gp/registry/wishlist/CDMUYYAWCCDF/ref=cm_wl_huc_view" target="_blank">amazon wish</a> come true. 
+			Decide price yourself by how useful it is for you and don't forget to <a href="http://wordpress.org/support/view/plugin-reviews/kush-micro-news" target="_blank">rate</a>. Thanks.
+	</div>
 	
 </div>
+
+
 <?php	
 }
 
