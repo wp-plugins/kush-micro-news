@@ -2,7 +2,7 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.4.2
+Version: 1.4.3
 Author: Kush Sharma
 Author Email: thekushsharma@gmail.com 
 Author URI: http://softnuke.com/
