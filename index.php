@@ -2,12 +2,12 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.4.3
+Version: 1.4.4
 Author: Kush Sharma
 Author Email: thekushsharma@gmail.com 
 Author URI: http://softnuke.com/
 Plugin URI: https://github.com/kushsharma/micro-news
-Last Officially Updated: 18 July 2014
+Last Officially Updated: 19 July 2014
 */
 
 define('KUSH_MICRO_NEWS_DIR', plugin_dir_path(__FILE__));
@@ -15,8 +15,8 @@ define('KUSH_MICRO_NEWS_URL', plugin_dir_url(__FILE__));
 	
 
 function kush_micronews_load_depen_reg(){
-	wp_register_style( 'kush_mn_style', KUSH_MICRO_NEWS_URL.'assets/css/style.css');	
-	wp_register_script( 'kush_mn_script', KUSH_MICRO_NEWS_URL.'assets/js/script.js', array('jquery'), '08052013');
+	wp_register_style( 'kush_mn_style', KUSH_MICRO_NEWS_URL.'assets/css/style.css', array(), '07192014');	
+	wp_register_script( 'kush_mn_script', KUSH_MICRO_NEWS_URL.'assets/js/script.js', array('jquery'), '07192014');
 	//importing stylesheet and js.
 }
 add_action('init','kush_micronews_load_depen_reg');
@@ -170,7 +170,7 @@ function kush_micronews_activation() {
 		add_option('kush_mn_widget_name','Micro News');
 		add_option('kush_mn_color_title','#0066cc');
 		add_option('kush_mn_color_text','#666666');
-		add_option('kush_mn_color_link','#8bbf36;');
+		add_option('kush_mn_color_link','#000000');
 	  	add_option('kush_mn_load_nav','false');
 
 	}

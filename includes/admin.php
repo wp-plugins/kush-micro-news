@@ -151,12 +151,12 @@ if(isset($_POST['valSub']))
 		</div>
 		<div class="options">
 			<label for="linkColorField">Link Color:</label>
-			<input type="text" name="linkColorField" value="<?php echo get_option('kush_mn_color_link');?>" />
+			<input type="text" name="linkColorField" value="<?php if(get_option('kush_mn_color_link') == ""){echo "#000000";}else{echo get_option('kush_mn_color_link');}?>" />
 			<select name="linkColorList" onclick="check_custom_color(this,'link')">
-				<option value="#8bbf36">Green [Default]</option>
+				<option value="#000000">Black [Default]</option>
+				<option value="#8bbf36">Green</option>
 				<option value="#666666">Grey</option>
 				<option value="#0066CC">Light Blue</option>
-				<option value="#000000">Black</option>
 				<option value="#fff2a8">Golden</option>
 				<option value="#F25555">Red</option>
 				<option value="#FFD700">Yellow</option>
