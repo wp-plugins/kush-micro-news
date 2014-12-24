@@ -37,6 +37,15 @@ if(isset($_POST['valSub']))
 	else
 		update_option( "kush_mn_load_nav",'false');
 
+	if(isset($_POST['chkLoadNavSwap']))
+		{if($_POST['chkLoadNavSwap']==true)
+			update_option( "kush_mn_load_nav_swap",'true');		
+			
+		$what='Changes Saved !';
+		}
+	else
+		update_option( "kush_mn_load_nav_swap",'false');
+
 	if(isset($_POST['myRename']))
 	{
 		if($_POST['myRename']!='')
@@ -108,15 +117,20 @@ if(isset($_POST['valSub']))
 			<h5 style="display:inline-block;margin:0;">(via kush_micro_news_output() function)</h5>
 		</div>
 		<div class="options">
-			<label for="chkLoadNav">Enable load more post navigation:</label>
-			<input type="checkbox" name="chkLoadNav" value="true" <?php $lnav=get_option('kush_mn_load_nav');if($lnav=='true'){echo 'checked';}?>/>
+			<label for="chkLoadNav">Load More navigation:</label>
+			<input type="checkbox" name="chkLoadNav" <?php $lnav=get_option('kush_mn_load_nav');if($lnav=='true'){echo 'checked';}?>/>
+		</div>
+		<div class="options">
+			<label for="chkLoadNavSwap">Swap news when navigating:</label>
+			<input type="checkbox" name="chkLoadNavSwap" <?php $lnavSwap=get_option('kush_mn_load_nav_swap');if($lnavSwap=='true'){echo 'checked';}?>/>
+			<h5 style="display:inline-block;margin:0;">Disabling this will append news when Load More is clicked.</h5>
 		</div>
 
 		<h3>Display Settings :</h3>
 		<div class="options">
 			<label for="myRename">Title over news:</label>
 			<input type="text" name="myRename" value="<?php echo get_option("kush_mn_widget_name");?>"/>
-			<h5 style="display:inline-block;margin:0;">(Try not to use any special character like inverted commas)</h5>
+			<h5 style="display:inline-block;margin:0;">(Do not use any special character like inverted commas)</h5>
 		</div>		
 		<div class="options">			
 			<label for="titleColor">Title Color:</label>
@@ -166,17 +180,17 @@ if(isset($_POST['valSub']))
 		</div>
 		<div class="options">
 			<label for="chkBorder">Enable colorful borders:</label>
-			<input type="checkbox" name="chkBorder" value="true" <?php $sBor=get_option('kush_mn_show_lborder');if($sBor=='true'){echo 'checked';}?>/>
+			<input type="checkbox" name="chkBorder" <?php $sBor=get_option('kush_mn_show_lborder');if($sBor=='true'){echo 'checked';}?>/>
 		</div>
 		<div class="options">
 			<label for="chkHover">Enable link hover effect:</label>
-			<input type="checkbox" name="chkHover" value="true" <?php $lHov=get_option('kush_mn_show_linkclean');if($lHov=='true'){echo 'checked';}?>/>
+			<input type="checkbox" name="chkHover" <?php $lHov=get_option('kush_mn_show_linkclean');if($lHov=='true'){echo 'checked';}?>/>
 		</div>	
 
 		<h3>Input Settings :</h3>
 		<div class="options">
 			<label for="chkHtmlParse">Allow HTML parsing while adding news:</label>
-			<input type="checkbox" name="chkHtmlParse" value="true" <?php $lHov=get_option('kush_mn_parse_html');if($lHov=='true'){echo 'checked';}?>/>
+			<input type="checkbox" name="chkHtmlParse" <?php $lHov=get_option('kush_mn_parse_html');if($lHov=='true'){echo 'checked';}?>/>
 			<h5 style="display:inline-block;margin:0;">(Try not to use improper markup if HTML parsing is enabled otherwise it could break up your whole site.)</h5>
 		</div>
 		
@@ -218,13 +232,13 @@ $what='';
 		if(get_option('kush_mn_parse_html')=='false')
 		{
 			$title=sanitize($_POST['k_mn_title']);
-			$content=sanitize($_POST['k_mn_content']);
+			$content=nl2br(sanitize($_POST['k_mn_content'])); //nl2br will convert any new line character to br tag respectively
 			$link=sanitize($_POST['k_mn_link']);
 		}
 		else
 		{
 			$title=$_POST['k_mn_title'];
-			$content=$_POST['k_mn_content'];
+			$content=($_POST['k_mn_content']); 
 			$link=$_POST['k_mn_link'];
 		}
 		

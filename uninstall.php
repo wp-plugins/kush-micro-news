@@ -15,6 +15,7 @@ delete_option('kush_mn_color_title');
 delete_option('kush_mn_color_text');
 delete_option('kush_mn_color_link');
 delete_option('kush_mn_load_nav');
+delete_option('kush_mn_load_nav_swap');
 
 global $wpdb;
 	$table_name = $wpdb->prefix . "kushmicronews"; 

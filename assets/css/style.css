@@ -36,6 +36,23 @@
 	filter:alpha(opacity=70);	
 	padding: 0;
 	margin: 0;
+	position: relative;
+}
+
+#micro-news .hiddensanta{
+	background-image: url(../img/santa-hat-icon.png);
+	width: 20px;
+	height: 12px;
+	position: absolute;
+	top: 5px;
+	left: 0;
+	display: inline-block;
+	z-index: 5;
+	transform: rotate(307deg);
+	-webkit-transform: rotate(307deg);
+	-moz-transform: rotate(307deg);
+	-o-transform: rotate(307deg);
+	-ms-transform: rotate(307deg);
 }
 
 #micro-news .head strong{

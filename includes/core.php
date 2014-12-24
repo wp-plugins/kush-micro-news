@@ -50,6 +50,10 @@ $table_name = $wpdb->prefix . "kushmicronews";
 	$textColor = get_option('kush_mn_color_text');
 	$linkColor = get_option('kush_mn_color_link');
 	$loadNav = get_option('kush_mn_load_nav');
+	$loadNavSwap = get_option('kush_mn_load_nav_swap');
+
+	//way of updating news in navigation
+	$navStyle = ($loadNavSwap == 'true') ? 'swap' : 'append';
 	
 	$count_no_news = $wpdb->get_var("SELECT COUNT(`id`) FROM `$table_name`");
 
@@ -62,9 +66,16 @@ $table_name = $wpdb->prefix . "kushmicronews";
 		$output_html .= '<div id="micro-news" class="clearfix">';
 
 	if($header=="true"){
-		$output_html .= '<h2 class="head"><strong>'.$widgetName.'</strong></h2>';
+		$output_html .= '<h2 class="head">';
+		
+		$issantahere = date('m-d');//hidden santa hat
+		if( $issantahere == "12-24" || $issantahere == "12-25")
+			$output_html .= '<span class="hiddensanta"></span>';
+		
+		$output_html .= '<strong>'.$widgetName.'</strong></h2>';
 	}//header if closed 
 
+	//if anything changed in this div tag name, update javascript stripping as well
 	$output_html .='<div class="data-holder">';//container for rows
 	
 	foreach ( $rows as $row ) 		
@@ -109,8 +120,12 @@ $table_name = $wpdb->prefix . "kushmicronews";
 
 	if($onlyNews == "false" && $count_no_news > $no_of_news && $loadNav == "true") //whether to display nav
 	{
-	$output_html .='<div class="load-nav clearfix" data-total="'.$count_no_news.'">';
-		$output_html .='<div class="loadMore" data-num="'.$no_of_news.'" data-lastnews="'.$last_news_id.'" data-loops="1">Load More &raquo;</div>';//load more news
+	$output_html .='<div class="load-nav clearfix" data-total="'.$count_no_news.'" data-style="'.$navStyle.'">';
+		
+		//calculate symbol to put in load more
+		$loadmore_symbol = ($navStyle == 'swap') ? '&raquo;':'&darr;';
+
+		$output_html .='<div class="loadMore" data-num="'.$no_of_news.'" data-lastnews="'.$last_news_id.'" data-loops="1">Load More '.$loadmore_symbol.'</div>';//load more news
 		$output_html .='<div class="loadHome" data-num="'.$no_of_news.'">Home</div>';//load more news
 	$output_html .='</div>';
 	}
