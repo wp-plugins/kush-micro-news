@@ -10,6 +10,14 @@ add_menu_page('Micro News Board', 'Micro News','administrator' , 'micro-news', '
 
 add_submenu_page('micro-news','Micro News Add New', 'Add New', 'administrator','micro-news-new', 'micro_news_html_page_add_new');
 add_submenu_page('micro-news','Micro News Settings', 'Settings', 'administrator','micro-news-config', 'micro_news_config_page');
+
+	//check for plugin version and updating default
+	$d = get_plugin_data( KUSH_MICRO_NEWS_DIR.'index.php');
+	if($d['Version'] == "1.4.4")//
+	{
+		update_option("kush_mn_load_nav_swap","true");
+	}
+
 }
 
 function micro_news_config_page(){
