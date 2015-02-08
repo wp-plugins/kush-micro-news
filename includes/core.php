@@ -31,7 +31,7 @@ function kush_micronews_ajaxcallback()
 }
 
 
-function kush_micro_news_output($no_of_news=0,$header="true",$limit=0,$onlyNews="false"){
+function kush_micro_news_output($no_of_news=0, $header="true", $limit=0, $onlyNews="false"){
 	//this is responsible for displaying the final output to user site in widgets or anywhere this function is called!
 	//$header attribute will decide whether to show Micro News Header or not
 	//$limit variable will decide where to start news from
@@ -42,16 +42,18 @@ $table_name = $wpdb->prefix . "kushmicronews";
 	$color = array('#55A4F2','#8bbf36','#fff2a8','#33363B','#F25555','#666666','#999966','#FF66FF');
 	$i=0;//counter for multiple colors.
 	if($no_of_news==0)
-		{$no_of_news=get_option( "kush_mn_num_news");}
-	$showBorder=get_option('kush_mn_show_lborder');
-	$cleanHov=get_option('kush_mn_show_linkclean');
-	$widgetName = get_option('kush_mn_widget_name');
+		{$no_of_news=get_option( "kush_mn_num_news", '5');}
+	$showBorder=get_option('kush_mn_show_lborder', 'false');
+	$cleanHov=get_option('kush_mn_show_linkclean', 'false');
+	$widgetName = get_option('kush_mn_widget_name', 'Micro News');
 	$titleColor = get_option('kush_mn_color_title');
 	$textColor = get_option('kush_mn_color_text');
 	$linkColor = get_option('kush_mn_color_link');
-	$loadNav = get_option('kush_mn_load_nav');
-	$loadNavSwap = get_option('kush_mn_load_nav_swap');
+	$loadNav = get_option('kush_mn_load_nav','true');
+	$loadNavSwap = get_option('kush_mn_load_nav_swap','true');
+	$readStoryText = get_option('kush_mn_read_story_text','Read Full story &raquo;');
 
+	
 	//way of updating news in navigation
 	$navStyle = ($loadNavSwap == 'true') ? 'swap' : 'append';
 	
@@ -101,7 +103,7 @@ $table_name = $wpdb->prefix . "kushmicronews";
 				$output_html .='<span class="link ';
 				if($cleanHov!='true')//check if show link color inverted
 					$output_html .='clean';
-				$output_html .='"><a href="'.$row->url.'" title="'.$row->name.'" target="_blank" style="color:'.$linkColor.'">Read Full story &raquo;</a></span>';
+				$output_html .='"><a href="'.$row->url.'" title="'.$row->name.'" target="_blank" style="color:'.$linkColor.'">'.$readStoryText.'</a></span>';
 			endif;
 
 	    $output_html .='</div>';//wrapNews ends

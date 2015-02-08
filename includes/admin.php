@@ -12,16 +12,17 @@ add_submenu_page('micro-news','Micro News Add New', 'Add New', 'administrator','
 add_submenu_page('micro-news','Micro News Settings', 'Settings', 'administrator','micro-news-config', 'micro_news_config_page');
 
 	//check for plugin version and updating default
-	$d = get_plugin_data( KUSH_MICRO_NEWS_DIR.'index.php');
-	if($d['Version'] == "1.4.4")//
-	{
-		update_option("kush_mn_load_nav_swap","true");
-	}
+	// $d = get_plugin_data( KUSH_MICRO_NEWS_DIR.'index.php');
+	// if($d['Version'] == "1.4.4")//
+	// {
+	// 	update_option("kush_mn_load_nav_swap","true");
+	// }
 
 }
 
 function micro_news_config_page(){
 $what='';
+//$_POST = array_map('stripslashes_deep', $_POST['myRename']);
 if(isset($_POST['valSub']))
 {
 	if(isset($_POST['numPost']))
@@ -33,7 +34,10 @@ if(isset($_POST['valSub']))
 			 $what='Changes Saved !';
 			}
 		else
-			echo _e('<h3>No of post cannot left blank.</h3>');		
+		{
+			update_option( "kush_mn_num_news",'5');
+			echo _e('<h4>Number of post cannot left blank, reverted to default.</h4>');		
+		}
 	}
 
 	if(isset($_POST['chkLoadNav']))
@@ -56,12 +60,33 @@ if(isset($_POST['valSub']))
 
 	if(isset($_POST['myRename']))
 	{
+		$_POST['myRename'] = stripslashes($_POST['myRename']);
+
 		if($_POST['myRename']!='')
-		{update_option("kush_mn_widget_name",$_POST['myRename']);		 
+		{ update_option("kush_mn_widget_name", htmlspecialchars($_POST['myRename']));		 
 		 $what='Changes Saved !';
 		}
-	else
-		echo _e('<h3>Name cannot be left blank.</h3>');
+		else
+		{
+			update_option("kush_mn_widget_name", 'Micro News');
+		}
+		
+	}
+
+	if(isset($_POST['fullStoryText']))
+	{
+
+		$_POST['fullStoryText'] = stripslashes($_POST['fullStoryText']);
+
+		if($_POST['fullStoryText']!='')
+		{update_option("kush_mn_read_story_text", htmlspecialchars($_POST['fullStoryText']));		 
+		 $what='Changes Saved !';
+		}
+		else
+		{
+			update_option("kush_mn_read_story_text",'Read Full story &raquo;');
+		}
+		
 		
 	}
 	if(isset($_POST['chkBorder']))
@@ -138,8 +163,13 @@ if(isset($_POST['valSub']))
 		<div class="options">
 			<label for="myRename">Title over news:</label>
 			<input type="text" name="myRename" value="<?php echo get_option("kush_mn_widget_name");?>"/>
-			<h5 style="display:inline-block;margin:0;">(Do not use any special character like inverted commas)</h5>
-		</div>		
+			<h5 style="display:inline-block;margin:0;">(Default: Micro News)</h5>
+		</div>
+		<div class="options">
+			<label for="myRename">Full Story Text:</label>
+			<input type="text" name="fullStoryText" value="<?php echo get_option("kush_mn_read_story_text");?>"/>
+			<h5 style="display:inline-block;margin:0;">(Default: Read Full story &raquo;)</h5>
+		</div>			
 		<div class="options">			
 			<label for="titleColor">Title Color:</label>
 			<input type="text" name="titleColor" value="<?php echo get_option('kush_mn_color_title');?>" />
