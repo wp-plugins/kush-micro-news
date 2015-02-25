@@ -23,6 +23,7 @@ add_submenu_page('micro-news','Micro News Settings', 'Settings', 'administrator'
 function micro_news_config_page(){
 $what='';
 //$_POST = array_map('stripslashes_deep', $_POST['myRename']);
+
 if(isset($_POST['valSub']))
 {
 	if(isset($_POST['numPost']))
@@ -237,6 +238,11 @@ if(isset($_POST['valSub']))
 		<input type="submit" value="Save Changes" class="button-primary"/>
 		<br><hr>
 		Download Backup of your Micro News data : <a href="?backup=true" target="_blank" class="button-primary">Download</a>
+
+
+		<br><hr>
+		Update table storage(to support utf-8 charset): <a href="?updatedb=true" target="_blank" class="button-primary">Update</a>
+		<h5 style="display:inline-block;margin:0;">Create a backup first.</h5>
 	</form>	
 	<br><br>
 	Note : Give <a href="http://plugins.svn.wordpress.org/kush-micro-news/trunk/readme.txt" target="_blank">readme.txt</a> a try before experimenting stuff if you have no idea what you are doing.
@@ -254,6 +260,18 @@ if(isset($_POST['valSub']))
 	}	
 </script>
 <?php
+}
+
+if(isset($_GET['updatedb']) && $_GET['updatedb']=='true')
+	update_table();
+function update_table(){
+	global $wpdb;
+	$table_name = $wpdb->prefix . "kushmicronews";
+			
+	$rows_affected = $wpdb->query("ALTER TABLE `$table_name` CONVERT TO CHARACTER SET utf8");
+	if($rows_affected == 1)
+		echo 'Updated Successfully!';
+				
 }
 
 function micro_news_html_page(){
