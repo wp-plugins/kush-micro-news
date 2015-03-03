@@ -2,12 +2,12 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.5.3
+Version: 1.6.0
 Author: Kush Sharma
 Author Email: thekushsharma@gmail.com 
 Author URI: http://softnuke.com/
 Plugin URI: https://github.com/kushsharma/micro-news
-Last Officially Updated: 25 Feb 2015
+Last Officially Updated: 03 Mar 2015
 */
 
 define('KUSH_MICRO_NEWS_DIR', plugin_dir_path(__FILE__));
@@ -15,8 +15,8 @@ define('KUSH_MICRO_NEWS_URL', plugin_dir_url(__FILE__));
 	
 
 function kush_micronews_load_depen_reg(){
-	wp_register_style( 'kush_mn_style', KUSH_MICRO_NEWS_URL.'assets/css/style.css', array(), '25122014');	
-	wp_register_script( 'kush_mn_script', KUSH_MICRO_NEWS_URL.'assets/js/script.js', array('jquery'), '25122014');
+	wp_register_style( 'kush_mn_style', KUSH_MICRO_NEWS_URL.'assets/css/style.css', array(), '02032015');	
+	wp_register_script( 'kush_mn_script', KUSH_MICRO_NEWS_URL.'assets/js/script.js', array('jquery'), '02032015');
 	//importing stylesheet and js.
 }
 add_action('init','kush_micronews_load_depen_reg');
@@ -63,13 +63,13 @@ function kush_micronews_create_shortcode(){
 	// this will create shortcode [kushmicronews news="5" header="true"]
 	
 	function micronews_shortcode( $atts ) {
-	    $a = shortcode_atts( array( 'news' => '5', 'header' => 'true' ), $atts );
+	    $a = shortcode_atts( array( 'news' => '5', 'header' => 'true', 'category' => 'default', 'simple' => 'true' ), $atts );
 
-	    return kush_micro_news_output($a['news'],$a['header']);
+	    return kush_micro_news_output($a['news'], $a['header'], 0, $a['simple'], $a['category']);
 	}
 	add_shortcode( 'kushmicronews', 'micronews_shortcode' );
 }
-	
+
 
 register_activation_hook(__FILE__, 'kush_micronews_activation');
 register_deactivation_hook(__FILE__, 'kush_micronews_deactivation');
@@ -86,10 +86,11 @@ class KushMNWidget extends WP_Widget {
 			// Widget output
 			extract($args, EXTR_SKIP);
 			
-			$no_news = empty($instance['no_news']) ? '' : apply_filters('no_news', $instance['no_news']);
+			$no_news = empty($instance['no_news']) ? '5' : apply_filters('no_news', $instance['no_news']);
+			$news_cat = empty($instance['news_cat']) ? 'default' : apply_filters('news_cat', $instance['news_cat']);
 			
 			echo $before_widget;			
-			echo kush_micro_news_output($no_news);			
+			echo kush_micro_news_output($no_news, "true", "0", "false", $news_cat);			
 			echo $after_widget;
 		}
 
@@ -98,7 +99,8 @@ class KushMNWidget extends WP_Widget {
 			$instance = $old_instance;
 		
 			$instance['no_news'] = strip_tags(stripslashes($new_instance['no_news']));
-			
+			$instance['news_cat'] = strip_tags(stripslashes($new_instance['news_cat']));
+
 			return $instance;
 		}
 
@@ -106,10 +108,12 @@ class KushMNWidget extends WP_Widget {
 			// Output admin widget options form
 			
 			
-		$instance = wp_parse_args((array)$instance,	array('no_news' => ''));
+		$instance = wp_parse_args((array)$instance,	array('no_news' => '', 'news_cat' => 'default'));
 
 		$no_news = strip_tags(stripslashes($instance['no_news']));
-			
+		$news_cat =  strip_tags(stripslashes($instance['news_cat'])); 	
+
+		$dbver = get_option('kush_mn_db_version','0');
 ?>
 			
 			  	<div class="option">
@@ -119,6 +123,23 @@ class KushMNWidget extends WP_Widget {
 				  <input type="text" id="<?php echo $this->get_field_id('no_news'); ?>" name="<?php echo $this->get_field_name('no_news'); ?>" value="<?php echo $instance['no_news']; ?>" />
 				  <h5>~Default: 5</h5>
 				</div>
+				<?php if($dbver != '0' && $dbver != '1.0'): ?> 
+					<div class="option">
+					  <label for="news_cat">
+						<?php _e('Category'); ?>
+					  </label>
+	<!-- 				  <input type="text" id="<?php echo $this->get_field_id('news_cat'); ?>" name="<?php echo $this->get_field_name('news_cat'); ?>" value="<?php echo $news_cat; ?>" />
+	 -->				<select name="<?php echo $this->get_field_name('news_cat'); ?>" id="<?php echo $this->get_field_id('news_cat'); ?>">
+						  <option value="default" <?php if($news_cat == "default") echo 'selected';?> >Default</option>
+						  <option value="cata" <?php if($news_cat == "cata") echo 'selected';?> >CatA</option>
+						  <option value="catb" <?php if($news_cat == "catb") echo 'selected';?> >CatB</option>
+						  <option value="catc" <?php if($news_cat == "catc") echo 'selected';?> >CatC</option>
+						  <option value="catd" <?php if($news_cat == "catd") echo 'selected';?> >CatD</option>
+						</select>
+					  <h5>~Default: "default"</h5>
+					</div>
+				<?php endif;?>
+				
 			
 <?php
 		}//form ends		
@@ -143,12 +164,13 @@ function kush_micronews_activation() {
 		
 	if($wpdb->get_var("SHOW TABLES LIKE '".$table_name."';")!=$table_name)   
 	{	
-		$query = "CREATE TABLE $table_name (
+		$query = "CREATE TABLE `$table_name` (
 		  id mediumint(9) PRIMARY KEY AUTO_INCREMENT,
 		  time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		  name mediumtext NOT NULL,
 		  text text NOT NULL,
-		  url tinytext
+		  url tinytext,
+		  category varchar(20) DEFAULT 'default'
 		);";
 		
 		dbDelta( $query );
@@ -159,10 +181,16 @@ function kush_micronews_activation() {
 	  $welcome_text = "Congratulations, you just completed the installation! Delete or edit this news.";
 	  $welcome_link = "http://www.softnuke.com";
 	  $rows_affected = $wpdb->insert( $table_name, array( 'time' => current_time('mysql'), 'name' => $welcome_name, 'text' =>$welcome_text, 'url' => $welcome_link ) );
+		
+	  //update charset
+	  $rows_affected = $wpdb->query("ALTER TABLE `$table_name` CONVERT TO CHARACTER SET utf8");
+
 	}
 	
 		//setting default values
-		add_option('kush_mn_db_version', "1.0" );		
+		add_option('kush_mn_db_version', "1.1" );
+		//db : 1.0 without category column
+
 		add_option('kush_mn_num_news',"5"); 
 		add_option('kush_mn_show_lborder','true');
 		add_option('kush_mn_show_linkclean','true');

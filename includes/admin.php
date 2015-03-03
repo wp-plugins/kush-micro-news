@@ -22,7 +22,11 @@ add_submenu_page('micro-news','Micro News Settings', 'Settings', 'administrator'
 
 function micro_news_config_page(){
 $what='';
+//update_option('kush_mn_db_version','1.0');
 //$_POST = array_map('stripslashes_deep', $_POST['myRename']);
+
+//notify user if there is db update required
+kush_micronews_check_dbupdate();
 
 if(isset($_POST['valSub']))
 {
@@ -241,7 +245,7 @@ if(isset($_POST['valSub']))
 
 
 		<br><hr>
-		Update table storage(to support utf-8 charset): <a href="?updatedb=true" target="_blank" class="button-primary">Update</a>
+		Update table storage: <a href="?updatedb=true" target="_blank" class="button-primary">Update</a>
 		<h5 style="display:inline-block;margin:0;">Create a backup first.</h5>
 	</form>	
 	<br><br>
@@ -265,13 +269,44 @@ if(isset($_POST['valSub']))
 if(isset($_GET['updatedb']) && $_GET['updatedb']=='true')
 	update_table();
 function update_table(){
+	$ver = get_option('kush_mn_db_version','0');
+	$text = "";
+
 	global $wpdb;
 	$table_name = $wpdb->prefix . "kushmicronews";
-			
+	
+	$rows_affected = 0;
+
 	$rows_affected = $wpdb->query("ALTER TABLE `$table_name` CONVERT TO CHARACTER SET utf8");
-	if($rows_affected == 1)
-		echo 'Updated Successfully!';
-				
+	
+	if($ver == "1.0")
+	{	
+		$rows_affected += $wpdb->query("ALTER TABLE `$table_name` ADD `category` varchar(20) DEFAULT 'default'");			
+	}
+
+	if($rows_affected > 0)
+	{
+		$text .= "Updated Successfully! "; 
+		update_option('kush_mn_db_version','1.1');
+	}
+
+	$text .= "Update Code:"+$rows_affected;
+	$text .= " DB VERSION:"+get_option('kush_mn_db_version','0');
+
+	echo $text;
+}
+
+function kush_micronews_check_dbupdate()
+{
+	$ver = get_option('kush_mn_db_version','0');
+
+	if($ver != "0")
+	{
+		if($ver == "1.0")
+		{
+			echo "<div class='update-nag'>URGENT: DATABASE UPDATE REQUIRED! Use button at the end of Settings page.</div>";
+		}
+	}
 }
 
 function micro_news_html_page(){
@@ -282,6 +317,10 @@ function micro_news_html_page(){
 }
 
 function micro_news_html_page_add_new(){	
+//notify user if there is db update required
+kush_micronews_check_dbupdate();
+$dbver = get_option('kush_mn_db_version','0');
+
 $what='';	
 	if(isset($_POST['k_mn_hidden']) && $_POST['k_mn_hidden']=='Y')
 		{
@@ -290,22 +329,34 @@ $what='';
 			$title=sanitize($_POST['k_mn_title']);
 			$content=nl2br(sanitize($_POST['k_mn_content'])); //nl2br will convert any new line character to br tag respectively
 			$link=sanitize($_POST['k_mn_link']);
+			
 		}
 		else
 		{
 			$title=$_POST['k_mn_title'];
 			$content=($_POST['k_mn_content']); 
 			$link=$_POST['k_mn_link'];
+
 		}
+
+		if(empty($_POST['k_mn_cat']) == false)
+			$cat = $_POST['k_mn_cat'];
+		else
+			$cat = "default";
 		
-			
 		global $wpdb;			
 		$table_name = $wpdb->prefix . "kushmicronews";
+		
+		$query = "INSERT INTO `$table_name` (`time`,`name`,`text`,`url`,`category`) VALUES ('".date('Y-m-d H:i:s')."','$title','$content','$link','$cat');";
+		if($dbver == '0' || $dbver == '1.0' || $dbver == '')
+		{//database without category column, to overwrite query string
+			$query = "INSERT INTO `$table_name` (`time`,`name`,`text`,`url`) VALUES ('".date('Y-m-d H:i:s')."','$title','$content','$link');";
+		}		
 			
 		if($title!='')
 			{				
 			
-			$rows_affected = $wpdb->query("INSERT INTO `$table_name` (`time`,`name`,`text`,`url`)VALUES('".date('Y-m-d H:i:s')."','$title','$content','$link');");
+			$rows_affected = $wpdb->query($query);
 				
 			if($rows_affected==true)
 				{?><div class="updated"><p><strong><?php _e('New Post Added.' ); ?></strong></p></div>'<?php }
@@ -313,6 +364,7 @@ $what='';
 		else
 			{$what='Don\'t you think atleast title is necessary.';}
 		}
+
 ?>
 <div class="wrap">
 <div class="icon32" id="icon-tools"> <br /> </div>
@@ -324,16 +376,29 @@ $what='';
 		<div>
 			<div class="row">
 				<label for="k_mn_title">Title:</label>
-				<input type="text" name="k_mn_title" id="title" placeholder="Title of News"/>
+				<input type="text" name="k_mn_title" placeholder="Title of News"/>
 			</div>
 			<div class="row">
 				<label for="k_mn_content">Content:</label>
-				<textarea name="k_mn_content" id="content" placeholder="Excerpt">.</textarea>
+				<textarea name="k_mn_content" placeholder="Excerpt">.</textarea>
 			</div>
 			<div class="row">
 				<label for="k_mn_link">Link:</label>
-				<input type="text" name="k_mn_link" id="link" placeholder="Link Reference"/>
+				<input type="text" name="k_mn_link" placeholder="Link Reference"/>
 			</div>
+			<?php if($dbver != '0' && $dbver != '1.0' && $dbver != '') :?>
+				<div class="row">
+					<label for="k_mn_cat">Category Key:</label>
+					<!-- <input type="text" name="k_mn_cat" placeholder="Category Key:" value="default"/> -->
+					<select name="k_mn_cat">
+					  <option value="default" selected>Default</option>
+					  <option value="cata">CatA</option>
+					  <option value="catb">CatB</option>
+					  <option value="catc">CatC</option>
+					  <option value="catd">CatD</option>
+					</select>
+				</div>
+			<?php endif; ?>
 			<input type="hidden" name="k_mn_hidden" value="Y">
 			
 			<div class="row">

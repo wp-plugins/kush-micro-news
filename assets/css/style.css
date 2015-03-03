@@ -259,11 +259,17 @@
 	border: 2px solid black;
 }
 
+#update-micro-news select{
+	width:400px;
+	border: 2px solid black;
+}
+
 #update-micro-news textarea{
 	min-width:400px;
 	min-height:80px;
 	border: 2px solid black;
 }
+
 
 /*pagination*/
 .micro-news-post-nav{
@@ -304,6 +310,11 @@
 
 #add-micro-news input[type=text]{
 	min-width:400px;
+	border: 2px solid black;
+}
+
+#add-micro-news select{
+	width: 400px;
 	border: 2px solid black;
 }
 
