@@ -2,7 +2,7 @@
 /*
 Plugin Name: Kush Micro News
 Description: Spread the news in shortest possible way. Use links to refer data and title to concise it.
-Version: 1.6.0
+Version: 1.6.1
 Author: Kush Sharma
 Author Email: thekushsharma@gmail.com 
 Author URI: http://softnuke.com/
@@ -15,8 +15,8 @@ define('KUSH_MICRO_NEWS_URL', plugin_dir_url(__FILE__));
 	
 
 function kush_micronews_load_depen_reg(){
-	wp_register_style( 'kush_mn_style', KUSH_MICRO_NEWS_URL.'assets/css/style.css', array(), '02032015');	
-	wp_register_script( 'kush_mn_script', KUSH_MICRO_NEWS_URL.'assets/js/script.js', array('jquery'), '02032015');
+	wp_register_style( 'kush_mn_style', KUSH_MICRO_NEWS_URL.'assets/css/style.css', array(), '03032015');	
+	wp_register_script( 'kush_mn_script', KUSH_MICRO_NEWS_URL.'assets/js/script.js', array('jquery'), '03032015');
 	//importing stylesheet and js.
 }
 add_action('init','kush_micronews_load_depen_reg');
@@ -63,7 +63,7 @@ function kush_micronews_create_shortcode(){
 	// this will create shortcode [kushmicronews news="5" header="true"]
 	
 	function micronews_shortcode( $atts ) {
-	    $a = shortcode_atts( array( 'news' => '5', 'header' => 'true', 'category' => 'default', 'simple' => 'true' ), $atts );
+	    $a = shortcode_atts( array( 'news' => '5', 'header' => 'true', 'category' => 'default', 'simple' => 'false' ), $atts );
 
 	    return kush_micro_news_output($a['news'], $a['header'], 0, $a['simple'], $a['category']);
 	}
@@ -86,7 +86,7 @@ class KushMNWidget extends WP_Widget {
 			// Widget output
 			extract($args, EXTR_SKIP);
 			
-			$no_news = empty($instance['no_news']) ? '5' : apply_filters('no_news', $instance['no_news']);
+			$no_news = empty($instance['no_news']) ? get_option( "kush_mn_num_news", '5') : apply_filters('no_news', $instance['no_news']);
 			$news_cat = empty($instance['news_cat']) ? 'default' : apply_filters('news_cat', $instance['news_cat']);
 			
 			echo $before_widget;			
@@ -108,7 +108,7 @@ class KushMNWidget extends WP_Widget {
 			// Output admin widget options form
 			
 			
-		$instance = wp_parse_args((array)$instance,	array('no_news' => '', 'news_cat' => 'default'));
+		$instance = wp_parse_args((array)$instance,	array('no_news' => '5', 'news_cat' => 'default'));
 
 		$no_news = strip_tags(stripslashes($instance['no_news']));
 		$news_cat =  strip_tags(stripslashes($instance['news_cat'])); 	
