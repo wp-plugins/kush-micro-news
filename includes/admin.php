@@ -132,7 +132,24 @@ if(isset($_POST['valSub']))
 		update_option( "kush_mn_color_link",$_POST['linkColorField']);
 		$what='Changes Saved !';
 	}
+
+	if(isset($_POST['headTextColor']) && $_POST['headTextColor']!="")
+	{
+		update_option( "kush_mn_head_textColor",$_POST['headTextColor']);
+		$what='Changes Saved !';
+	}
 	
+	if(isset($_POST['headHighlightColor']) && $_POST['headHighlightColor']!="")
+	{
+		update_option( "kush_mn_head_highlightColor",$_POST['headHighlightColor']);
+		$what='Changes Saved !';
+	}
+
+	if(isset($_POST['headBack']) && $_POST['headBack']!="")
+	{
+		update_option( "kush_mn_head_back",$_POST['headBack']);
+		$what='Changes Saved !';
+	}
 }
 ?>
 <div class="wrap">
@@ -141,7 +158,7 @@ if(isset($_POST['valSub']))
 	<?php echo ($what!='')?'<div class="updated"><p><strong>'.$what.'</strong></p></div>':''; ?>
 	<br/>
 	<form action="" method="post" id="mirco-news-config">
-		<h3>Functional Settings :</h3>
+		<h3>Functional :</h3>
 		<div class="options">
 			<label for="numPost">Number of news to display:</label>
 			<input type="text" name="numPost" value="<?php echo get_option( "kush_mn_num_news");?>"/>
@@ -157,12 +174,62 @@ if(isset($_POST['valSub']))
 			<h5 style="display:inline-block;margin:0;">Disabling this will append news when Load More is clicked.</h5>
 		</div>
 
-		<h3>Display Settings :</h3>
+		<h3>Header :</h3>
 		<div class="options">
 			<label for="myRename">Title over news:</label>
 			<input type="text" name="myRename" value="<?php echo get_option("kush_mn_widget_name");?>"/>
 			<h5 style="display:inline-block;margin:0;">(Default: Micro News)</h5>
 		</div>
+		<div class="options">			
+			<label for="headTextColor">Head Text Color:</label>
+			<input type="text" name="headTextColor" value="<?php echo get_option('kush_mn_head_textColor');?>" />
+			<select name="titleColorList" onclick="check_custom_color(this,'title')">
+				<option value="#FFFFFF">White [Default]</option>
+				<option value="#0066CC">Light Blue</option>
+				<option value="#000000">Black</option>
+				<option value="#666666">Grey</option>
+				<option value="#8bbf36">Green</option>
+				<option value="#fff2a8">Golden</option>
+				<option value="#F25555">Red</option>
+				<option value="#FFD700">Yellow</option>
+				<option value="#FFB6C1">Pink</option>
+				<option value="#191970">Midnight Blue</option>				
+			</select>
+			<h5 style="display:inline-block;margin:0;">(Hexadecimal color values, like: #0066CC)</h5>
+		</div>
+		<div class="options">			
+			<label for="headHighlightColor">Head Highlight Color:</label>
+			<input type="text" name="headHighlightColor" value="<?php echo get_option('kush_mn_head_highlightColor');?>" />
+			<select name="titleColorList" onclick="check_custom_color(this,'title')">
+				<option value="#808080">Light Grey [Default]</option>
+				<option value="#0066CC">Light Blue</option>
+				<option value="#000000">Black</option>
+				<option value="#666666">Grey</option>
+				<option value="#8bbf36">Green</option>
+				<option value="#fff2a8">Golden</option>
+				<option value="#F25555">Red</option>
+				<option value="#FFD700">Yellow</option>
+				<option value="#FFB6C1">Pink</option>
+				<option value="#191970">Midnight Blue</option>				
+			</select>
+		</div>
+		<div class="options">			
+			<label for="headBack">Head Background Color:</label>
+			<input type="text" name="headBack" value="<?php echo get_option('kush_mn_head_back');?>" />
+			<select name="titleColorList" onclick="check_custom_color(this,'title')">
+				<option value="default">Grey Bars [Default]</option>
+				<option value="#000000">Black</option>
+				<option value="#666666">Grey</option>
+				<option value="#8bbf36">Green</option>
+				<option value="#fff2a8">Golden</option>
+				<option value="#F25555">Red</option>
+				<option value="#FFD700">Yellow</option>
+				<option value="#FFB6C1">Pink</option>
+				<option value="#191970">Midnight Blue</option>				
+			</select>
+		</div>
+
+		<h3>Display :</h3>
 		<div class="options">
 			<label for="myRename">Full Story Text:</label>
 			<input type="text" name="fullStoryText" value="<?php echo get_option("kush_mn_read_story_text");?>"/>
@@ -223,7 +290,7 @@ if(isset($_POST['valSub']))
 			<input type="checkbox" name="chkHover" <?php $lHov=get_option('kush_mn_show_linkclean');if($lHov=='true'){echo 'checked';}?>/>
 		</div>	
 
-		<h3>Input Settings :</h3>
+		<h3>Input :</h3>
 		<div class="options">
 			<label for="chkHtmlParse">Allow HTML parsing while adding news:</label>
 			<input type="checkbox" name="chkHtmlParse" <?php $lHov=get_option('kush_mn_parse_html');if($lHov=='true'){echo 'checked';}?>/>
@@ -246,14 +313,11 @@ if(isset($_POST['valSub']))
 	
 </div>
 <script type="text/javascript">
-	function check_custom_color(obj,elem){
-		var form = document.getElementById('mirco-news-config');	
-		if(elem == 'title')
-			form.titleColor.value = obj.value;
-		else if(elem == 'text')
-			form.textColor.value = obj.value;
-		else
-			form.linkColorField.value = obj.value;
+	function check_custom_color(obj,elem){		
+		jQuery(document).ready(function() {
+			//changing values of sibling input field corresponding
+			jQuery(obj).parent().find("input[type = text]").attr("value", obj.value);
+		});
 	}	
 </script>
 <?php

@@ -46,10 +46,16 @@ $table_name = $wpdb->prefix . "kushmicronews";
 		{$no_of_news=get_option( "kush_mn_num_news", '5');}
 	$showBorder=get_option('kush_mn_show_lborder', 'false');
 	$cleanHov=get_option('kush_mn_show_linkclean', 'false');
+
 	$widgetName = get_option('kush_mn_widget_name', 'Micro News');
+	$headTextColor = get_option('kush_mn_head_textColor','#FFFFFF');
+	$headHighlightColor = get_option('kush_mn_head_highlightColor','#808080');
+	$headBack = get_option('kush_mn_head_back','default');
+	
 	$titleColor = get_option('kush_mn_color_title');
 	$textColor = get_option('kush_mn_color_text');
 	$linkColor = get_option('kush_mn_color_link');
+	
 	$loadNav = get_option('kush_mn_load_nav','true');
 	$loadNavSwap = get_option('kush_mn_load_nav_swap','true');
 	$readStoryText = get_option('kush_mn_read_story_text','Read Full story &raquo;');
@@ -82,13 +88,18 @@ $table_name = $wpdb->prefix . "kushmicronews";
 		$output_html .= '<div id="micro-news" class="clearfix">';
 
 	if($header=="true"){
-		$output_html .= '<h2 class="head">';
+		$output_html .= '<h2 class="head"';
+		if($headBack != "default")//background custom color if any
+			$output_html .= 'style="background:'.$headBack.'"';
+		$output_html .= '>';
 		
 		$issantahere = date('m-d');//hidden santa hat
 		if( $issantahere == "12-24" || $issantahere == "12-25")
 			$output_html .= '<span class="hiddensanta"></span>';
 		
-		$output_html .= '<strong>'.$widgetName.'</strong></h2>';
+		//custom highlight and text color
+		$output_html .= '<strong style="background:'.$headHighlightColor.'; color:'.$headTextColor.'">';
+		$output_html .= $widgetName.'</strong></h2>';
 	}//header if closed 
 
 	//if anything changed in this div tag name, update javascript stripping as well
