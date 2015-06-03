@@ -2,15 +2,22 @@
 
 /*admin*/
 
+
 add_action('admin_menu', 'kush_micro_news_admin_menu');
 
 function kush_micro_news_admin_menu() {
-
-add_menu_page('Micro News Board', 'Micro News','administrator' , 'micro-news', 'micro_news_html_page','','6.1995');
-
-add_submenu_page('micro-news','Micro News Add New', 'Add New', 'administrator','micro-news-new', 'micro_news_html_page_add_new');
-add_submenu_page('micro-news','Micro News Settings', 'Settings', 'administrator','micro-news-config', 'micro_news_config_page');
-
+	if(get_option('kush_mn_editor_access','false') == 'true'){
+	//editor	
+		add_menu_page('Micro News Board', 'Micro News','publish_pages' , 'micro-news', 'micro_news_html_page','','6.1995');
+		add_submenu_page('micro-news','Micro News Add New', 'Add New', 'publish_pages','micro-news-new', 'micro_news_html_page_add_new');
+		add_submenu_page('micro-news','Micro News Settings', 'Settings', 'publish_pages','micro-news-config', 'micro_news_config_page');
+	}
+	else
+	{//administrator
+		add_menu_page('Micro News Board', 'Micro News','install_plugins' , 'micro-news', 'micro_news_html_page','','6.1995');
+		add_submenu_page('micro-news','Micro News Add New', 'Add New', 'install_plugins','micro-news-new', 'micro_news_html_page_add_new');
+		add_submenu_page('micro-news','Micro News Settings', 'Settings', 'install_plugins','micro-news-config', 'micro_news_config_page');
+	}
 }
 
 function micro_news_config_page(){
@@ -106,11 +113,11 @@ if(isset($_POST['valSub']))
 		update_option('kush_mn_show_linkclean','false');
 		
 	if(isset($_POST['chkHtmlParse']))
-		{if($_POST['chkHtmlParse']==true)
+	{	if($_POST['chkHtmlParse']==true)
 			update_option( "kush_mn_parse_html",'true');		
 		
 		$what='Changes Saved !';
-		}
+	}
 	else	
 		update_option('kush_mn_parse_html','false');
 	
@@ -150,6 +157,17 @@ if(isset($_POST['valSub']))
 		update_option( "kush_mn_head_back",$_POST['headBack']);
 		$what='Changes Saved !';
 	}
+
+
+	if(isset($_POST['editorAccess']))
+	{	if($_POST['editorAccess'] == true)
+			update_option( "kush_mn_editor_access",'true');		
+		
+		$what='Changes Saved !';
+	}
+	else	
+		update_option('kush_mn_editor_access','false');
+	
 }
 ?>
 <div class="wrap">
@@ -177,12 +195,12 @@ if(isset($_POST['valSub']))
 		<h3>Header :</h3>
 		<div class="options">
 			<label for="myRename">Title over news:</label>
-			<input type="text" name="myRename" value="<?php echo get_option("kush_mn_widget_name");?>"/>
+			<input type="text" name="myRename" value="<?php echo get_option("kush_mn_widget_name", "Micro News");?>"/>
 			<h5 style="display:inline-block;margin:0;">(Default: Micro News)</h5>
 		</div>
 		<div class="options">			
 			<label for="headTextColor">Head Text Color:</label>
-			<input type="text" name="headTextColor" value="<?php echo get_option('kush_mn_head_textColor');?>" />
+			<input type="text" name="headTextColor" value="<?php echo get_option('kush_mn_head_textColor','#FFFFFF');?>" />
 			<select name="titleColorList" onclick="check_custom_color(this,'title')">
 				<option value="#FFFFFF">White [Default]</option>
 				<option value="#0066CC">Light Blue</option>
@@ -199,7 +217,7 @@ if(isset($_POST['valSub']))
 		</div>
 		<div class="options">			
 			<label for="headHighlightColor">Head Highlight Color:</label>
-			<input type="text" name="headHighlightColor" value="<?php echo get_option('kush_mn_head_highlightColor');?>" />
+			<input type="text" name="headHighlightColor" value="<?php echo get_option('kush_mn_head_highlightColor','#808080');?>" />
 			<select name="titleColorList" onclick="check_custom_color(this,'title')">
 				<option value="#808080">Light Grey [Default]</option>
 				<option value="#0066CC">Light Blue</option>
@@ -215,7 +233,7 @@ if(isset($_POST['valSub']))
 		</div>
 		<div class="options">			
 			<label for="headBack">Head Background Color:</label>
-			<input type="text" name="headBack" value="<?php echo get_option('kush_mn_head_back');?>" />
+			<input type="text" name="headBack" value="<?php echo get_option('kush_mn_head_back','default');?>" />
 			<select name="titleColorList" onclick="check_custom_color(this,'title')">
 				<option value="default">Grey Bars [Default]</option>
 				<option value="#000000">Black</option>
@@ -237,7 +255,7 @@ if(isset($_POST['valSub']))
 		</div>			
 		<div class="options">			
 			<label for="titleColor">Title Color:</label>
-			<input type="text" name="titleColor" value="<?php echo get_option('kush_mn_color_title');?>" />
+			<input type="text" name="titleColor" value="<?php echo get_option('kush_mn_color_title','#0066CC');?>" />
 			<select name="titleColorList" onclick="check_custom_color(this,'title')">
 				<option value="#0066CC">Light Blue [Default]</option>
 				<option value="#000000">Black</option>
@@ -253,7 +271,7 @@ if(isset($_POST['valSub']))
 		</div>
 		<div class="options">
 			<label for="textColor">Text Color:</label>
-			<input type="text" name="textColor" value="<?php echo get_option('kush_mn_color_text');?>" />
+			<input type="text" name="textColor" value="<?php echo get_option('kush_mn_color_text', '#666666');?>" />
 			<select name="textColorList" onclick="check_custom_color(this,'text')">
 				<option value="#666666">Grey [Default]</option>
 				<option value="#0066CC">Light Blue</option>
@@ -268,7 +286,7 @@ if(isset($_POST['valSub']))
 		</div>
 		<div class="options">
 			<label for="linkColorField">Link Color:</label>
-			<input type="text" name="linkColorField" value="<?php if(get_option('kush_mn_color_link') == ""){echo "#000000";}else{echo get_option('kush_mn_color_link');}?>" />
+			<input type="text" name="linkColorField" value="<?php echo get_option('kush_mn_color_link', '#000000');?>" />
 			<select name="linkColorList" onclick="check_custom_color(this,'link')">
 				<option value="#000000">Black [Default]</option>
 				<option value="#8bbf36">Green</option>
@@ -292,9 +310,15 @@ if(isset($_POST['valSub']))
 
 		<h3>Input :</h3>
 		<div class="options">
-			<label for="chkHtmlParse">Allow HTML parsing while adding news:</label>
+			<label for="chkHtmlParse">HTML parsing while adding news:</label>
 			<input type="checkbox" name="chkHtmlParse" <?php $lHov=get_option('kush_mn_parse_html');if($lHov=='true'){echo 'checked';}?>/>
 			<h5 style="display:inline-block;margin:0;">(Try not to use improper markup if HTML parsing is enabled otherwise it could break up your whole site.)</h5>
+		</div>
+
+		<h3>Access :</h3>
+		<div class="options">
+			<label for="editorAccess">Enable access to Editors:</label>
+			<input type="checkbox" name="editorAccess" <?php $lHov=get_option('kush_mn_editor_access');if($lHov=='true'){echo 'checked';}?>/>
 		</div>
 		
 		<br/><br/>

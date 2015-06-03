@@ -52,9 +52,9 @@ $table_name = $wpdb->prefix . "kushmicronews";
 	$headHighlightColor = get_option('kush_mn_head_highlightColor','#808080');
 	$headBack = get_option('kush_mn_head_back','default');
 	
-	$titleColor = get_option('kush_mn_color_title');
-	$textColor = get_option('kush_mn_color_text');
-	$linkColor = get_option('kush_mn_color_link');
+	$titleColor = get_option('kush_mn_color_title','#0066CC');
+	$textColor = get_option('kush_mn_color_text', '#666666');
+	$linkColor = get_option('kush_mn_color_link', '#000000');
 	
 	$loadNav = get_option('kush_mn_load_nav','true');
 	$loadNavSwap = get_option('kush_mn_load_nav_swap','true');
